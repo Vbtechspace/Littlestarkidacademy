@@ -1,18 +1,22 @@
 # Little Star Kid Academy — Abacus Practice App
 
-A single self-contained web page (`index.html`) with an interactive soroban
-(Japanese abacus): Explore, Read It, Build It, Quick Math practice modes,
-plus an "Assign" tab teachers can use to create practice-set links for
-students. No build step, no server, no dependencies to install — it's one
-HTML file with everything (styles, script, and the Little Star Kid Academy
-logo) embedded inside it.
+An interactive soroban (Japanese abacus): Explore, Read It, Build It, Quick
+Math practice modes, plus an "Assign" tab teachers can use to create
+practice-set links for students. No build step, no server, nothing to
+install — `index.html` is one file with everything (styles, script, the
+Little Star Kid Academy logo) embedded inside it. It also installs as a
+home-screen app on phones (see below), using the small `manifest.json` and
+`icons/` folder included in this ZIP.
 
 ## Host it on GitHub Pages (free, a few minutes)
 
 1. Create a new repository on GitHub (e.g. `little-star-abacus`).
-2. Upload `index.html` from this ZIP to the root of that repository
-   (via "Add file → Upload files" on the repo's GitHub page, or `git push`
-   if you're using the command line).
+2. Upload **all the files in this ZIP, keeping their folder structure** —
+   `index.html`, `manifest.json`, and the whole `icons/` folder — to the
+   root of that repository. On the repo's GitHub page: "Add file → Upload
+   files", then drag in `index.html` and `manifest.json` plus everything
+   inside `icons/` (GitHub will recreate the `icons/` folder automatically
+   from the file paths). `git push` works too if you use the command line.
 3. In the repository, go to **Settings → Pages**.
 4. Under "Build and deployment", set **Source** to **Deploy from a branch**,
    pick the **main** branch and the **/ (root)** folder, then click **Save**.
@@ -22,6 +26,23 @@ logo) embedded inside it.
 
 That's it — no other setup is needed. The page works entirely in the
 visitor's browser.
+
+## Making it feel like a real app, not a website
+
+Opening the link in Chrome will always show the address bar and tabs —
+that's just how any website looks in a browser, not something to fix. To
+get the full "app" feel (its own icon, opens full-screen, no address bar):
+
+**On Android (Chrome):** open the site → tap the **⋮** menu → **"Add to
+Home screen"** / **"Install app"** → confirm. It now sits on the home
+screen with the Little Star icon and opens full-screen, like any other app.
+
+**On iPhone (Safari):** open the site → tap the **Share** icon → **"Add to
+Home Screen"** → confirm.
+
+This works because of the `manifest.json` and icon files included here —
+without them the shortcut still works, it just won't get a proper icon or
+full-screen mode.
 
 ## Using it with students
 

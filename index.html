@@ -1,4 +1,12 @@
 <title>Little Star Kid Academy</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/favicon-32.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#53184F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Little Star Abacus">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
 <style>
   :root{
@@ -300,6 +308,10 @@
   /* ---------- assignment result (student finish) ---------- */
   .assign-score{ font-family:var(--font-display); font-size:clamp(2rem,9vw,2.6rem); font-weight:800; font-variant-numeric:tabular-nums; }
   .name-input{ width:20ch; text-align:center; font-family:var(--font-display); font-size:.95rem; }
+  .name-input.is-invalid{ border-color:var(--error); }
+  .name-hint{ font-size:.76rem; font-weight:700; color:var(--text-muted); margin:0; max-width:300px; text-align:center; }
+  .name-hint.is-error{ color:var(--error); }
+  .btn.is-disabled{ opacity:.5; cursor:not-allowed; }
 
   a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
 </style>
@@ -436,9 +448,10 @@
       <h2>Nice work!</h2>
       <div class="assign-score" id="assignResultScore">0 / 0</div>
       <p class="instructions" id="assignResultMsg"></p>
-      <label class="sr-only" for="studentName">Your name (optional)</label>
-      <input class="name-input" id="studentName" type="text" maxlength="24" placeholder="Name (optional)">
-      <a class="btn btn-primary" id="btnSendWa" href="https://wa.me/" target="_blank" rel="noopener">Send my results on WhatsApp</a>
+      <label class="sr-only" for="studentName">Your name</label>
+      <input class="name-input" id="studentName" type="text" maxlength="24" placeholder="Your name" required aria-required="true">
+      <p class="name-hint" id="nameHint">Enter your name first — your teacher needs to know who this is.</p>
+      <a class="btn btn-primary is-disabled" id="btnSendWa" href="https://wa.me/" target="_blank" rel="noopener" aria-disabled="true">Send my results on WhatsApp</a>
       <p class="assign-hint" id="waHint"></p>
     </section>
 
@@ -845,15 +858,35 @@
     var pct = Math.round(100 * assignment.correct / assignment.total);
     els.assignResultMsg.textContent = pct === 100 ? 'Perfect score! Amazing work.' :
       (pct >= 70 ? 'Great practice today!' : "Good effort — keep practicing, you'll get there!");
+    els.studentName.value = '';
+    els.studentName.classList.remove('is-invalid');
     updateWaHref();
+    updateSendButtonState();
     els.waHint.textContent = TEACHER_WHATSAPP ?
       'Taps open WhatsApp with your results ready to send.' :
       'Opens WhatsApp — pick your teacher to send the results.';
   }
 
+  function nameIsValid(){
+    return els.studentName.value.trim().length > 0;
+  }
+
+  function updateSendButtonState(){
+    var ok = nameIsValid();
+    els.btnSendWa.classList.toggle('is-disabled', !ok);
+    els.btnSendWa.setAttribute('aria-disabled', ok ? 'false' : 'true');
+    if (ok){
+      els.studentName.classList.remove('is-invalid');
+      els.nameHint.classList.remove('is-error');
+      els.nameHint.hidden = true;
+    } else {
+      els.nameHint.hidden = false;
+    }
+  }
+
   function updateWaHref(){
     var name = els.studentName.value.trim();
-    var who = name ? name : 'A student';
+    var who = name || 'A student';
     var lines = [
       who + ' just finished a Little Star Abacus practice set.',
       assignment.label ? ('Set: ' + assignment.label) : null,
@@ -975,7 +1008,7 @@
      'assignHeader','assignHeaderLabel','assignProgressFill','assignProgressText',
      'assignMode','assignDiff','assignCount','assignLabel','btnCreateAssign',
      'assignResult','assignLink','btnCopyLink','btnShareWa',
-     'assignResultScore','assignResultMsg','studentName','btnSendWa','waHint'
+     'assignResultScore','assignResultMsg','studentName','nameHint','btnSendWa','waHint'
     ].forEach(function(id){ els[id] = $(id); });
     els.stage = document.querySelector('.stage');
   }
@@ -1033,7 +1066,22 @@
         flashCopied();
       }
     });
-    els.studentName.addEventListener('input', function(){ if (assignment) updateWaHref(); });
+    els.studentName.addEventListener('input', function(){
+      if (!assignment) return;
+      updateWaHref();
+      updateSendButtonState();
+    });
+    els.btnSendWa.addEventListener('click', function(e){
+      if (!nameIsValid()){
+        e.preventDefault();
+        e.stopPropagation();
+        els.studentName.classList.add('is-invalid');
+        els.nameHint.hidden = false;
+        els.nameHint.classList.add('is-error');
+        els.nameHint.textContent = 'Please enter your name before sending.';
+        els.studentName.focus();
+      }
+    });
 
     var resizeTimer;
     window.addEventListener('resize', function(){
