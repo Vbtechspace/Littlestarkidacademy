@@ -5,18 +5,23 @@ Math practice modes, plus an "Assign" tab teachers can use to create
 practice-set links for students. No build step, no server, nothing to
 install — `index.html` is one file with everything (styles, script, the
 Little Star Kid Academy logo) embedded inside it. It also installs as a
-home-screen app on phones (see below), using the small `manifest.json` and
-`icons/` folder included in this ZIP.
+home-screen app on phones (see below), using the other small files
+included in this ZIP (`manifest.json`, `sw.js`, and the icon PNGs).
 
 ## Host it on GitHub Pages (free, a few minutes)
 
 1. Create a new repository on GitHub (e.g. `little-star-abacus`).
-2. Upload **all the files in this ZIP, keeping their folder structure** —
-   `index.html`, `manifest.json`, and the whole `icons/` folder — to the
-   root of that repository. On the repo's GitHub page: "Add file → Upload
-   files", then drag in `index.html` and `manifest.json` plus everything
-   inside `icons/` (GitHub will recreate the `icons/` folder automatically
-   from the file paths). `git push` works too if you use the command line.
+2. **Upload every file in this ZIP to the root of that repository — all
+   in one upload, all loose, no folders.** On the repo's GitHub page:
+   "Add file → Upload files", then drag in all 8 files at once
+   (`index.html`, `manifest.json`, `sw.js`, `README.md`, and the 4 `.png`
+   icon files). They must all sit side-by-side at the top level of the
+   repo — not inside any subfolder. `git push` works too if you use the
+   command line.
+   - If you'd already uploaded an earlier version with an `icons/`
+     subfolder, delete that folder from the repo first (open it, delete
+     each file inside, or use "..." → Delete on the folder) so there's no
+     confusion between the old and new icon paths.
 3. In the repository, go to **Settings → Pages**.
 4. Under "Build and deployment", set **Source** to **Deploy from a branch**,
    pick the **main** branch and the **/ (root)** folder, then click **Save**.
