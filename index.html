@@ -22,6 +22,7 @@
   }
 </script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<script async src="https://www.instagram.com/embed.js"></script>
 <style>
 
   :root{
@@ -131,6 +132,10 @@ button{ font-family:inherit; }
 }
 .install-tip-close:hover{ background:var(--surface); color:var(--text); }
 .install-tip[hidden]{ display:none; }
+.install-tip-watch{
+  display:inline-block; margin-top:6px; background:none; border:none; padding:0;
+  color:var(--accent); font-weight:800; font-size:.78rem; cursor:pointer; text-decoration:underline;
+}
 
 /* ---------- header ---------- */
 .topbar{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
@@ -347,7 +352,8 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   <div class="install-tip" id="installTip" role="note">
     <p><strong>Tip:</strong> Get the Little Star Kid Academy app — no app store needed!<br>
     <strong>Android</strong> – Tap 3 dots ⋮ → Install app.<br>
-    <strong>iPhone</strong> – Tap Share → Add to Home Screen.</p>
+    <strong>iPhone</strong> – Tap Share → Add to Home Screen.<br>
+    <button type="button" class="install-tip-watch" id="installTipWatch">▶ Watch a 30-second how-to video</button></p>
     <button type="button" class="install-tip-close" id="installTipClose" aria-label="Dismiss tip">×</button>
   </div>
 
@@ -367,6 +373,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     <div class="menu-panel">
       <h2>Menu</h2>
       <button class="menu-item" id="menuResetStats">Reset my stats</button>
+      <button class="menu-item" id="menuInstallHelp">🎬 Watch install video</button>
       <button class="menu-item" id="menuAbout">About this app</button>
       <button class="menu-item back-btn menu-close" id="menuClose">Close</button>
     </div>
@@ -486,6 +493,22 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
         <p class="name-hint" id="nameHint">Enter your name first — your teacher needs to know who this is.</p>
         <a class="btn btn-primary is-disabled" id="btnSendWa" href="https://wa.me/" target="_blank" rel="noopener" aria-disabled="true">Send my results on WhatsApp</a>
         <p class="assign-hint" id="waHint"></p>
+      </div>
+    </section>
+
+    <!-- ===================== INSTALL HELP (Instagram reel) ===================== -->
+    <section class="view" id="view-installhelp" hidden>
+      <div class="view-header">
+        <button class="back-btn" id="btnInstallHelpBack">‹ Back</button>
+        <h2>Install as an app</h2>
+      </div>
+      <div class="setup-card">
+        <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DdczbiESjUe/" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:12px; margin:0 auto; max-width:400px; width:100%;"></blockquote>
+        <p class="assign-hint"><a href="https://www.instagram.com/reel/DdczbiESjUe/" target="_blank" rel="noopener">Open the video on Instagram ↗</a> if it doesn't load above.</p>
+        <p class="summary-detail" style="text-align:left;">
+          <strong>Android</strong> – Tap the ⋮ menu in Chrome → Install app.<br>
+          <strong>iPhone</strong> – Tap the Share icon in Safari → Add to Home Screen.
+        </p>
       </div>
     </section>
 
@@ -852,7 +875,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   /* ================= view switching ================= */
 
-  var ALL_VIEWS = ['setup', 'session', 'summary', 'history', 'highscores', 'stats', 'assign', 'assignresult'];
+  var ALL_VIEWS = ['setup', 'session', 'summary', 'history', 'highscores', 'stats', 'assign', 'assignresult', 'installhelp'];
   var NAV_VIEWS = { setup: true, highscores: true, stats: true, assign: true };
 
   function showView(id){
@@ -1368,7 +1391,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   /* ================= wiring ================= */
 
   function cacheEls(){
-    ['installTip','installTipClose','btnMenu','btnMute','menuDrawer','menuResetStats','menuAbout','menuClose',
+    ['installTip','installTipClose','installTipWatch','btnMenu','btnMute','menuDrawer','menuResetStats','menuInstallHelp','menuAbout','menuClose',
      'practiceTabs','skillTabs','configForm','btnStart','btnHistory',
      'sessionLeftMeta','sessionScore','sessionAttempted','sessionProgressTrack','sessionProgressFill',
      'sessionStatus','sessionPrompt','sessionInput','btnSessionCheck','btnSessionReplay','sessionFeedback','btnSessionQuit',
@@ -1376,8 +1399,15 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
      'btnHistoryBack','historyList','highScoresList','statCards','statBars',
      'assignSkillTabs','assignConfigForm','assignLabel','btnCreateAssign','assignResultBlock','assignLink','btnCopyLink','btnShareWa',
      'assignResultScore','assignResultMsg','studentName','nameHint','btnSendWa','waHint',
+     'btnInstallHelpBack',
      'bottomNav','sparkleLayer'
     ].forEach(function(id){ els[id] = $(id); });
+  }
+
+  function showInstallHelp(){
+    els.menuDrawer.hidden = true;
+    showView('installhelp');
+    if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
   }
 
   function attachHandlers(){
@@ -1387,6 +1417,9 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.menuClose.addEventListener('click', function(){ els.menuDrawer.hidden = true; });
     els.menuDrawer.addEventListener('click', function(e){ if (e.target === els.menuDrawer) els.menuDrawer.hidden = true; });
     els.menuResetStats.addEventListener('click', function(){ resetStats(); els.menuDrawer.hidden = true; });
+    els.menuInstallHelp.addEventListener('click', showInstallHelp);
+    els.installTipWatch.addEventListener('click', showInstallHelp);
+    els.btnInstallHelpBack.addEventListener('click', function(){ showView('setup'); });
     els.menuAbout.addEventListener('click', function(){
       alert('Little Star Kid Academy — Abacus & Mental Math Practice.\nMaking education more creative.');
     });
