@@ -315,6 +315,7 @@
   /* ---------- abacus area wrapper ---------- */
   .abacus-area{ display:flex; flex-direction:column; align-items:center; gap:14px; width:100%; }
   .modes[hidden], .difficulty[hidden], .chips[hidden], .abacus-area[hidden], .assign-header[hidden]{ display:none; }
+  .training-hub[hidden], .training-drill[hidden]{ display:none; }
 
   /* ---------- assignment (student) header ---------- */
   .assign-header{ width:100%; text-align:center; display:flex; flex-direction:column; gap:7px; }
@@ -344,6 +345,30 @@
   .btn.is-disabled{ opacity:.5; cursor:not-allowed; }
 
   a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+
+  /* ---------- training hub + drill ---------- */
+  .training-hub{ display:flex; flex-direction:column; gap:10px; width:100%; }
+  .training-section-title{
+    font-family:var(--font-display); font-weight:800; font-size:1rem; color:var(--text);
+    margin:4px 0 -2px;
+  }
+  .training-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; }
+  .training-tile{
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:14px;
+    padding:14px 10px; font-family:var(--font-display); font-weight:700; font-size:.88rem;
+    text-align:center; cursor:pointer; box-shadow:var(--card-shadow); transition:transform .12s ease;
+    min-height:60px; display:flex; align-items:center; justify-content:center; line-height:1.25;
+  }
+  .training-tile.advanced{ background:var(--heaven-1); color:#fff; }
+  .training-tile:hover{ transform:translateY(-2px); }
+  .training-tile:active{ transform:translateY(0); }
+  .training-drill{ display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; }
+  .training-back{ align-self:flex-start; }
+  .training-skill-label{ font-family:var(--font-display); font-weight:800; font-size:1.05rem; margin:0; }
+  .training-prompt{
+    font-family:var(--font-display); font-size:clamp(1.7rem,7vw,2.3rem); font-weight:700;
+    font-variant-numeric:tabular-nums; text-align:center;
+  }
 </style>
 
 </head>
@@ -375,6 +400,7 @@
     <button class="mode-btn" data-mode="read" role="tab" aria-pressed="false">Read It</button>
     <button class="mode-btn" data-mode="build" role="tab" aria-pressed="false">Build It</button>
     <button class="mode-btn" data-mode="quickmath" role="tab" aria-pressed="false">Quick Math</button>
+    <button class="mode-btn" data-mode="training" role="tab" aria-pressed="false">Training</button>
     <button class="mode-btn" data-mode="assign" role="tab" aria-pressed="false">Assign</button>
   </nav>
 
@@ -436,6 +462,38 @@
       <p class="instructions">Move the beads to solve it:</p>
       <div class="qm-problem" id="qmProblem">0 + 0 = ?</div>
       <button class="btn btn-primary" id="btnQmCheck">Check my beads</button>
+    </section>
+
+    <section class="panel" id="panel-training" hidden>
+      <div class="training-hub" id="trainingHub">
+        <h3 class="training-section-title">Basic Training</h3>
+        <div class="training-grid">
+          <button class="training-tile" data-skill="add">Addition Training</button>
+          <button class="training-tile" data-skill="sub">Subtraction Training</button>
+          <button class="training-tile" data-skill="mul">Multiplication Training</button>
+          <button class="training-tile" data-skill="div">Division Training</button>
+        </div>
+        <h3 class="training-section-title">Advanced Training</h3>
+        <div class="training-grid">
+          <button class="training-tile advanced" data-skill="square">Square Training</button>
+          <button class="training-tile advanced" data-skill="sqrt">Square Root Training</button>
+          <button class="training-tile advanced" data-skill="pct">Percentage Training</button>
+          <button class="training-tile advanced" data-skill="mean">Mean Training</button>
+          <button class="training-tile advanced" data-skill="decmul">Decimal Multiplication</button>
+          <button class="training-tile advanced" data-skill="decsub">Decimal Subtraction</button>
+        </div>
+      </div>
+
+      <div class="training-drill" id="trainingDrill" hidden>
+        <button type="button" class="link-btn training-back" id="btnTrainingBack">‹ All training</button>
+        <p class="training-skill-label" id="trainingSkillLabel">Addition Training</p>
+        <div class="training-prompt" id="trainingPrompt">0 + 0</div>
+        <div class="row">
+          <label class="sr-only" for="trainingInput">Your answer</label>
+          <input class="num-input" id="trainingInput" type="text" inputmode="decimal" placeholder="?">
+          <button class="btn btn-primary" id="btnTrainingCheck">Check</button>
+        </div>
+      </div>
     </section>
 
     <section class="panel" id="panel-assign" hidden>
@@ -550,6 +608,11 @@
       "Share the link however you like — WhatsApp, email, anything.",
       "Every link plays the exact same problems, so you can try it yourself first.",
       "Mixed gives a bit of reading, building, and math in one set."
+    ],
+    training: [
+      "Pick any skill tile to start a set of quick-fire problems.",
+      "Type your answer and press Check or hit Enter.",
+      "Switch difficulty any time from the pills above."
     ]
   };
 
@@ -570,6 +633,8 @@
   var resetArmed = false;
   var resetTimer = null;
   var assignment = null; // active student-side practice set, or null in free play
+  var trainingSkill = null; // selected training skill key, or null when hub is showing
+  var trainingCurrent = null; // { prompt, answer, decimals }
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function $(id){ return document.getElementById(id); }
@@ -728,7 +793,7 @@
 
   /* ---------------- modes ---------------- */
 
-  var ALL_PANELS = ['panel-explore', 'panel-read', 'panel-build', 'panel-quickmath', 'panel-assign', 'panel-assignresult'];
+  var ALL_PANELS = ['panel-explore', 'panel-read', 'panel-build', 'panel-quickmath', 'panel-training', 'panel-assign', 'panel-assignresult'];
   function showOnly(id){
     ALL_PANELS.forEach(function(p){ $(p).hidden = (p !== id); });
   }
@@ -739,13 +804,14 @@
     buttons.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.mode === mode ? 'true' : 'false'); });
 
     showOnly('panel-' + mode);
-    els.abacusArea.hidden = (mode === 'assign');
+    els.abacusArea.hidden = (mode === 'assign' || mode === 'training');
     els.exploreValue.hidden = (mode !== 'explore');
 
     setTip(mode);
     clearFeedback();
 
     if (mode === 'explore') updateExploreValue();
+    else if (mode === 'training') exitTrainingHub();
     else if (mode !== 'assign') newRound();
   }
 
@@ -760,6 +826,7 @@
     buttons.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.diff === key ? 'true' : 'false'); });
     buildAbacus();
     if (state.mode === 'explore') updateExploreValue();
+    else if (state.mode === 'training'){ if (trainingSkill) nextTrainingProblem(); }
     else newRound();
   }
 
@@ -802,6 +869,7 @@
 
   function newRound(){
     if (state.mode === 'explore' || state.mode === 'assign') return;
+    if (state.mode === 'training'){ nextTrainingProblem(); return; }
     applyProblem(state.mode, generateProblem(state.mode, state.rods, Math.random));
     setTip(state.mode);
   }
@@ -833,6 +901,186 @@
     updateChips();
     saveProgress();
     if (correct) setTimeout(newRound, 900);
+  }
+
+  /* ---------------- training mode ---------------- */
+
+  var TRAINING_RANGES = {
+    beginner: [1, 9],
+    explorer: [10, 99],
+    master: [100, 999],
+    champion: [1000, 9999]
+  };
+
+  function gcd(a, b){ a = Math.abs(a); b = Math.abs(b); while (b){ var t = b; b = a % b; a = t; } return a || 1; }
+
+  function roundTo(n, decimals){
+    var f = Math.pow(10, decimals);
+    return Math.round((n + (n >= 0 ? 1e-9 : -1e-9)) * f) / f;
+  }
+
+  function trainingRange(diffKey){ return TRAINING_RANGES[diffKey] || TRAINING_RANGES.explorer; }
+
+  function genAddition(diffKey, rng){
+    var r = trainingRange(diffKey);
+    var a = randIntWith(rng, r[0], r[1]);
+    var b = randIntWith(rng, r[0], r[1]);
+    return { prompt: formatNumber(a) + ' + ' + formatNumber(b), answer: a + b, decimals: 0 };
+  }
+
+  function genSubtraction(diffKey, rng){
+    var r = trainingRange(diffKey);
+    var a = randIntWith(rng, r[0], r[1]);
+    var b = randIntWith(rng, r[0], r[1]);
+    if (b > a){ var t = a; a = b; b = t; } // keep results non-negative for kids
+    return { prompt: formatNumber(a) + ' − ' + formatNumber(b), answer: a - b, decimals: 0 };
+  }
+
+  function genMultiplication(diffKey, rng){
+    var caps = { beginner: [1, 9], explorer: [2, 12], master: [10, 30], champion: [10, 99] };
+    var r = caps[diffKey] || caps.explorer;
+    var a = randIntWith(rng, r[0], r[1]);
+    var b = randIntWith(rng, 2, diffKey === 'champion' ? 20 : (diffKey === 'master' ? 12 : 9));
+    return { prompt: formatNumber(a) + ' × ' + formatNumber(b), answer: a * b, decimals: 0 };
+  }
+
+  function genDivision(diffKey, rng){
+    var caps = { beginner: [1, 9], explorer: [2, 12], master: [2, 20], champion: [2, 30] };
+    var r = caps[diffKey] || caps.explorer;
+    var divisor = randIntWith(rng, r[0], r[1]);
+    var quotient = randIntWith(rng, r[0], r[1]);
+    var dividend = divisor * quotient;
+    return { prompt: formatNumber(dividend) + ' ÷ ' + formatNumber(divisor), answer: quotient, decimals: 0 };
+  }
+
+  function genSquare(diffKey, rng){
+    var caps = { beginner: [1, 9], explorer: [2, 15], master: [10, 25], champion: [15, 40] };
+    var r = caps[diffKey] || caps.explorer;
+    var a = randIntWith(rng, r[0], r[1]);
+    return { prompt: formatNumber(a) + '²', answer: a * a, decimals: 0 };
+  }
+
+  function genSquareRoot(diffKey, rng){
+    var caps = { beginner: [1, 9], explorer: [2, 15], master: [10, 25], champion: [15, 40] };
+    var r = caps[diffKey] || caps.explorer;
+    var a = randIntWith(rng, r[0], r[1]);
+    return { prompt: '√' + formatNumber(a * a), answer: a, decimals: 0 };
+  }
+
+  function genPercentage(diffKey, rng){
+    var pctOptions = {
+      beginner: [10, 20, 25, 50],
+      explorer: [10, 20, 25, 50, 75],
+      master: [5, 10, 15, 20, 25, 40, 60, 75],
+      champion: [5, 8, 12, 15, 35, 45, 65, 85]
+    };
+    var pcts = pctOptions[diffKey] || pctOptions.explorer;
+    var pct = pcts[randIntWith(rng, 0, pcts.length - 1)];
+    // choose a base that's a multiple of 100/gcd(pct,100) so the answer is always a whole number
+    var step = 100 / gcd(pct, 100);
+    var maxMult = diffKey === 'champion' ? 40 : (diffKey === 'master' ? 25 : (diffKey === 'explorer' ? 15 : 8));
+    var base = step * randIntWith(rng, 1, maxMult);
+    var answer = Math.round(base * pct / 100);
+    return { prompt: pct + '% of ' + formatNumber(base), answer: answer, decimals: 0 };
+  }
+
+  function genMean(diffKey, rng){
+    var counts = { beginner: 3, explorer: 3, master: 4, champion: 5 };
+    var count = counts[diffKey] || 3;
+    var r = trainingRange(diffKey === 'beginner' ? 'beginner' : 'explorer');
+    var nums = [], sum = 0;
+    for (var tries = 0; tries < 25; tries++){
+      nums = []; sum = 0;
+      for (var i = 0; i < count; i++){
+        var v = randIntWith(rng, r[0], r[1]);
+        nums.push(v);
+        sum += v;
+      }
+      if (sum % count === 0){
+        return { prompt: 'Mean of ' + nums.map(formatNumber).join(', '), answer: sum / count, decimals: 0 };
+      }
+    }
+    // no exact-integer set turned up — fall back to a one-decimal mean
+    return { prompt: 'Mean of ' + nums.map(formatNumber).join(', '), answer: roundTo(sum / count, 1), decimals: 1 };
+  }
+
+  function genDecimalMultiplication(diffKey, rng){
+    var caps = { beginner: [1, 9], explorer: [2, 20], master: [2, 40], champion: [5, 90] };
+    var r = caps[diffKey] || caps.explorer;
+    var whole = randIntWith(rng, r[0], r[1]);
+    var tenths = randIntWith(rng, 1, 9);
+    var a = roundTo(whole + tenths / 10, 1);
+    var b = randIntWith(rng, 2, diffKey === 'beginner' ? 5 : 9);
+    return { prompt: a.toFixed(1) + ' × ' + formatNumber(b), answer: roundTo(a * b, 1), decimals: 1 };
+  }
+
+  function genDecimalSubtraction(diffKey, rng){
+    var r = trainingRange(diffKey);
+    var aWhole = randIntWith(rng, r[0], r[1]);
+    var bWhole = randIntWith(rng, r[0], r[1]);
+    var aTenths = randIntWith(rng, 0, 9);
+    var bTenths = randIntWith(rng, 0, 9);
+    var a = roundTo(aWhole + aTenths / 10, 1);
+    var b = roundTo(bWhole + bTenths / 10, 1);
+    if (b > a){ var t = a; a = b; b = t; }
+    return { prompt: a.toFixed(1) + ' − ' + b.toFixed(1), answer: roundTo(a - b, 1), decimals: 1 };
+  }
+
+  var TRAINING_SKILLS = {
+    add:    { label: 'Addition Training',        gen: genAddition },
+    sub:    { label: 'Subtraction Training',     gen: genSubtraction },
+    mul:    { label: 'Multiplication Training',  gen: genMultiplication },
+    div:    { label: 'Division Training',        gen: genDivision },
+    square: { label: 'Square Training',          gen: genSquare },
+    sqrt:   { label: 'Square Root Training',     gen: genSquareRoot },
+    pct:    { label: 'Percentage Training',      gen: genPercentage },
+    mean:   { label: 'Mean Training',            gen: genMean },
+    decmul: { label: 'Decimal Multiplication',   gen: genDecimalMultiplication },
+    decsub: { label: 'Decimal Subtraction',      gen: genDecimalSubtraction }
+  };
+
+  function enterTrainingSkill(key){
+    if (!TRAINING_SKILLS[key]) return;
+    trainingSkill = key;
+    els.trainingHub.hidden = true;
+    els.trainingDrill.hidden = false;
+    els.trainingSkillLabel.textContent = TRAINING_SKILLS[key].label;
+    clearFeedback();
+    nextTrainingProblem();
+  }
+
+  function exitTrainingHub(){
+    trainingSkill = null;
+    trainingCurrent = null;
+    els.trainingDrill.hidden = true;
+    els.trainingHub.hidden = false;
+    clearFeedback();
+  }
+
+  function nextTrainingProblem(){
+    if (!trainingSkill || !TRAINING_SKILLS[trainingSkill]) return;
+    trainingCurrent = TRAINING_SKILLS[trainingSkill].gen(state.diffKey, Math.random);
+    els.trainingPrompt.textContent = trainingCurrent.prompt + ' = ?';
+    els.trainingInput.value = '';
+    els.trainingInput.focus();
+  }
+
+  function formatTrainingAnswer(){
+    if (!trainingCurrent) return '';
+    return trainingCurrent.decimals > 0
+      ? trainingCurrent.answer.toFixed(trainingCurrent.decimals)
+      : formatNumber(trainingCurrent.answer);
+  }
+
+  function checkTrainingAnswer(){
+    if (!trainingCurrent) return;
+    var raw = els.trainingInput.value.trim();
+    if (!raw){ setFeedback('Type an answer first.', null); return; }
+    var val = parseFloat(raw.replace(/,/g, ''));
+    if (isNaN(val)){ setFeedback('Numbers only, please.', false); return; }
+    var correct = roundTo(val, trainingCurrent.decimals) === roundTo(trainingCurrent.answer, trainingCurrent.decimals);
+    var msg = correct ? 'Nice work! ✓' : ('Not quite — it was ' + formatTrainingAnswer());
+    handleResult(correct, msg);
   }
 
   /* ---------------- assignment: student flow ---------------- */
@@ -1048,7 +1296,8 @@
      'assignMode','assignDiff','assignCount','assignLabel','btnCreateAssign',
      'assignResult','assignLink','btnCopyLink','btnShareWa',
      'assignResultScore','assignResultMsg','studentName','nameHint','btnSendWa','waHint',
-     'installTip','installTipClose'
+     'installTip','installTipClose',
+     'trainingHub','trainingDrill','btnTrainingBack','trainingSkillLabel','trainingPrompt','trainingInput','btnTrainingCheck'
     ].forEach(function(id){ els[id] = $(id); });
     els.stage = document.querySelector('.stage');
   }
@@ -1122,6 +1371,13 @@
         els.studentName.focus();
       }
     });
+
+    els.trainingHub.querySelectorAll('.training-tile').forEach(function(btn){
+      btn.addEventListener('click', function(){ enterTrainingSkill(btn.dataset.skill); });
+    });
+    els.btnTrainingBack.addEventListener('click', exitTrainingHub);
+    els.btnTrainingCheck.addEventListener('click', checkTrainingAnswer);
+    els.trainingInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') checkTrainingAnswer(); });
 
     var resizeTimer;
     window.addEventListener('resize', function(){
