@@ -364,6 +364,21 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 .footer-logo-card{ background:#FFFFFF; padding:8px 16px; border-radius:14px; box-shadow:var(--card-shadow); }
 .footer-logo{ display:block; width:64px; height:64px; object-fit:contain; }
 
+/* ---------- home screen footer: reel + address + copyright ---------- */
+.home-footer{ display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; padding-top:8px; }
+.footer-reel{ display:flex; flex-direction:column; align-items:center; gap:6px; width:100%; }
+.footer-reel-frame{
+  width:100%; max-width:340px; height:560px; border-radius:16px; overflow:hidden;
+  box-shadow:var(--card-shadow); background:#000;
+}
+.footer-reel-frame iframe{ width:100%; height:100%; border:0; display:block; }
+.footer-reel-hint{ font-size:.72rem; color:var(--text-muted); font-weight:700; margin:0; }
+.footer-reel-hint a{ color:var(--accent); }
+.footer-address{ font-size:.78rem; color:var(--text-muted); font-weight:700; line-height:1.55; }
+.footer-address p{ margin:0; }
+.footer-org{ color:var(--text); font-weight:800; font-family:var(--font-display); font-size:.92rem; }
+.footer-copyright{ font-size:.72rem; color:var(--text-muted); font-weight:700; margin:0; }
+
 .sparkle-layer{ position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:50; }
 .sparkle{
   position:absolute; width:10px; height:10px; left:50%; top:50%;
@@ -460,6 +475,21 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
           <button class="btn btn-primary btn-block" id="btnStart" type="button">Start Practice</button>
           <button class="btn btn-outline btn-block" id="btnHistory" type="button">View Performance History</button>
         </div>
+      </div>
+
+      <div class="home-footer">
+        <div class="footer-reel">
+          <div class="footer-reel-frame">
+            <iframe src="https://www.instagram.com/reel/DdczbiESjUe/embed/" title="Little Star Kid Academy install tutorial reel" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen frameborder="0" scrolling="no" loading="lazy"></iframe>
+          </div>
+          <p class="footer-reel-hint">Tap the video if it doesn't start on its own — <a href="https://www.instagram.com/reel/DdczbiESjUe/" target="_blank" rel="noopener">watch on Instagram ↗</a></p>
+        </div>
+        <div class="footer-address">
+          <p class="footer-org">Little Star Kid Academy</p>
+          <p>JC Bose Road</p>
+          <p>Opp. P&amp;T Gate, near Landmark Hotel, Lalpur, Ranchi 834001</p>
+        </div>
+        <p class="footer-copyright">© Little Star Kid Academy 2026</p>
       </div>
     </section>
 
