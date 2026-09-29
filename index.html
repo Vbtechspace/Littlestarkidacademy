@@ -280,7 +280,9 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 .session-prompt{
   font-family:var(--font-display); font-size:clamp(1.6rem,7vw,2.3rem); font-weight:700;
   font-variant-numeric:tabular-nums; min-height:2.6em; display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; text-align:center; line-height:1.3; row-gap:.15em;
 }
+.session-prompt.is-long{ font-size:clamp(1rem,4.4vw,1.5rem); }
 .num-input{
   font-family:var(--font-display); font-size:1.5rem; font-weight:700; text-align:center; width:8ch;
   padding:9px 6px; border-radius:12px; border:2px solid var(--rodline); background:var(--surface-2); color:var(--text);
@@ -435,7 +437,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   <div class="login-modal" id="loginModal" hidden>
     <div class="login-panel">
       <h2>Member Log In</h2>
-      <p class="login-sub">Enter your Little Star Kid Academy member details to unlock every digit level on all 8 skills.</p>
+      <p class="login-sub">Enter your Little Star Kid Academy member details to unlock every digit level on all skills.</p>
       <div class="field">
         <label for="loginUsername">Username</label>
         <input type="text" id="loginUsername" autocomplete="username" autocapitalize="none" spellcheck="false">
@@ -698,7 +700,9 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   /* ================= skill schema ================= */
 
   var SKILLS = [
-    { id: 'addsub',     label: 'Add / Subtract' },
+    { id: 'addition',    label: 'Addition' },
+    { id: 'subtraction', label: 'Subtraction' },
+    { id: 'mix',         label: 'Mix' },
     { id: 'multiply',   label: 'Multiply' },
     { id: 'divide',     label: 'Divide' },
     { id: 'square',     label: 'Square' },
@@ -717,10 +721,17 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   }
 
   var SKILL_FIELDS = {
-    addsub: [
-      { key:'sumsType', label:'Sums Type', type:'select', options:[['addition','Addition'],['subtraction','Subtraction'],['mixed','Mixed']], def:'addition' },
+    addition: [
       { key:'digits', label:'No of Digits', type:'select', options:intOpts(1,4), def:'2', gated:true },
-      { key:'rows', label:'No of Rows', type:'select', options:intOpts(2,5), def:'3' }
+      { key:'rows', label:'No of Rows', type:'select', options:intOpts(2,100), def:'3' }
+    ],
+    subtraction: [
+      { key:'digits', label:'No of Digits', type:'select', options:intOpts(1,4), def:'2', gated:true },
+      { key:'rows', label:'No of Rows', type:'select', options:intOpts(2,100), def:'3' }
+    ],
+    mix: [
+      { key:'digits', label:'No of Digits', type:'select', options:intOpts(1,4), def:'2', gated:true },
+      { key:'rows', label:'No of Rows', type:'select', options:intOpts(2,100), def:'3' }
     ],
     multiply: [
       { key:'mcandDigits', label:'Multiplicand Digits', type:'select', options:intOpts(1,3), def:'1', gated:true },
@@ -834,25 +845,44 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   /* ================= problem generators ================= */
 
-  var GENERATORS = {
-    addsub: function(cfg, rng){
-      var rows = parseInt(cfg.rows, 10) || 3;
-      var digits = parseInt(cfg.digits, 10) || 2;
-      var nums = [];
-      for (var i = 0; i < rows; i++) nums.push(randDigits(rng, digits));
-      var total = nums[0];
-      var parts = [formatNumber(nums[0])];
-      for (var j = 1; j < rows; j++){
-        var op;
-        if (cfg.sumsType === 'addition') op = '+';
-        else if (cfg.sumsType === 'subtraction') op = '-';
-        else op = rng() < 0.5 ? '+' : '-';
-        if (op === '-' && total - nums[j] < 0) op = '+'; // keep results kid-friendly (non-negative)
-        total = op === '+' ? total + nums[j] : total - nums[j];
-        parts.push((op === '+' ? '+' : '−') + ' ' + formatNumber(nums[j]));
+  function addSubGenerator(cfg, rng, mode){
+    var rows = parseInt(cfg.rows, 10) || 3;
+    var digits = parseInt(cfg.digits, 10) || 2;
+
+    if (mode === 'subtraction'){
+      // Every row must genuinely subtract (no flipping to '+'), so the starting
+      // number is built to comfortably cover every amount taken away from it —
+      // that also guarantees a non-negative, properly-sized final answer.
+      var subs = [];
+      for (var s = 0; s < rows - 1; s++) subs.push(randDigits(rng, digits));
+      var sumSubs = subs.reduce(function(a, b){ return a + b; }, 0);
+      var first = sumSubs + randDigits(rng, digits);
+      var total = first;
+      var parts = [formatNumber(first)];
+      for (var k = 0; k < subs.length; k++){
+        total -= subs[k];
+        parts.push('− ' + formatNumber(subs[k]));
       }
       return { prompt: parts.join(' '), answer: total, decimals: 0 };
-    },
+    }
+
+    var nums = [];
+    for (var i = 0; i < rows; i++) nums.push(randDigits(rng, digits));
+    var total2 = nums[0];
+    var parts2 = [formatNumber(nums[0])];
+    for (var j = 1; j < rows; j++){
+      var op = mode === 'addition' ? '+' : (rng() < 0.5 ? '+' : '-');
+      if (op === '-' && total2 - nums[j] < 0) op = '+'; // keep results kid-friendly (non-negative)
+      total2 = op === '+' ? total2 + nums[j] : total2 - nums[j];
+      parts2.push((op === '+' ? '+' : '−') + ' ' + formatNumber(nums[j]));
+    }
+    return { prompt: parts2.join(' '), answer: total2, decimals: 0 };
+  }
+
+  var GENERATORS = {
+    addition: function(cfg, rng){ return addSubGenerator(cfg, rng, 'addition'); },
+    subtraction: function(cfg, rng){ return addSubGenerator(cfg, rng, 'subtraction'); },
+    mix: function(cfg, rng){ return addSubGenerator(cfg, rng, 'mixed'); },
     multiply: function(cfg, rng){
       var a = randDigits(rng, parseInt(cfg.mcandDigits, 10) || 1);
       var b = randDigits(rng, parseInt(cfg.mcatorDigits, 10) || 1);
@@ -971,10 +1001,10 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   var state = {
     practiceType: 'timed',
-    skill: 'addsub',
-    cfg: defaultCfg('addsub', 'timed'),
-    assignSkill: 'addsub',
-    assignCfg: defaultCfg('addsub', 'assign'),
+    skill: 'addition',
+    cfg: defaultCfg('addition', 'timed'),
+    assignSkill: 'addition',
+    assignCfg: defaultCfg('addition', 'assign'),
     muted: false,
     lastNavView: 'setup',
     premium: false
@@ -1103,9 +1133,14 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.sessionStatus.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s + ' remaining';
   }
 
+  function setSessionPrompt(text){
+    els.sessionPrompt.textContent = text;
+    els.sessionPrompt.classList.toggle('is-long', text.length > 40);
+  }
+
   function nextTimedProblem(){
     session.current = GENERATORS[session.skill](session.cfg, session.rng);
-    els.sessionPrompt.textContent = session.current.prompt + ' = ?';
+    setSessionPrompt(session.current.prompt + ' = ?');
     els.sessionInput.value = '';
     els.sessionInput.disabled = false;
     els.sessionInput.focus();
@@ -1162,6 +1197,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.sessionProgressFill.style.width = Math.round((session.index / session.total) * 100) + '%';
     session.current = GENERATORS[session.skill](session.cfg, session.rng);
     els.sessionPrompt.textContent = '🔊';
+    els.sessionPrompt.classList.remove('is-long');
     els.sessionInput.value = '';
     els.sessionInput.disabled = true;
     els.sessionStatus.textContent = 'Sum ' + (session.index + 1) + ' of ' + session.total + ' — listen...';
@@ -1174,7 +1210,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   function enableOralInput(){
     if (!session || session.type !== 'oral') return;
-    els.sessionPrompt.textContent = session.current.prompt + ' = ?';
+    setSessionPrompt(session.current.prompt + ' = ?');
     els.sessionStatus.textContent = 'Your turn — type the answer';
     els.sessionInput.disabled = false;
     els.sessionInput.focus();
@@ -1444,7 +1480,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.sessionProgressFill.style.width = Math.round((session.index / session.total) * 100) + '%';
     els.sessionStatus.textContent = 'Problem ' + (session.index + 1) + ' of ' + session.total;
     session.current = GENERATORS[session.skill](session.cfg, session.rng);
-    els.sessionPrompt.textContent = session.current.prompt + ' = ?';
+    setSessionPrompt(session.current.prompt + ' = ?');
     els.sessionInput.value = '';
     els.sessionInput.disabled = false;
     els.sessionInput.focus();
