@@ -4,6 +4,116 @@ This file tracks the major milestones of the app so far. Git history in this
 folder starts today (see note at the bottom for why), but this changelog
 covers everything built before that too, so you have a full record either way.
 
+## 2026-10-01 — Full 10-module AI course added to AI Hub (Starter & Advanced tracks)
+- Replaced the simple 4-card "Learn" section with a real mini-course: 10
+  modules inspired by a standard "AI Explorer" style curriculum — What is
+  AI?, Talking to AI (prompting), AI Art & Pictures, AI Video & Animation,
+  AI Stories & Comics, AI Music & Voices, AI for School, AI for Everyday
+  Life, Staying Safe with AI, and Your AI Project.
+- Every module has two tracks you can switch between any time, right at
+  the top of the AI Hub: 🌱 **Starter** (ages 4–10, simple language and
+  short sentences) and 🚀 **Advanced** (ages 7–17, more real vocabulary —
+  prompts, training data, deepfakes — while staying age-appropriate).
+- Tapping a module opens its lesson cards (same read-aloud, prev/next,
+  dots style as before); "‹ All modules" returns to the module list.
+- The creative modules (AI Art, AI Video, AI Music, Stories) are explained
+  with examples only — no real image/video/music generation is wired up,
+  since that needs paid external AI services and would not work for free
+  inside an offline page. Where this app already has a genuine, honest
+  example of the concept, the lesson points to it directly: the AI Art
+  module's last card links straight into the existing Draw-a-Number game
+  ("Try it in Play"), and the AI Music module points at the 🔊 Read Aloud
+  button already used throughout the app, since that already is a small
+  real AI (text-to-speech) running on the device.
+- The Quiz was expanded from 6 questions to two 8-question quizzes, one
+  per track, covering the new module topics (prompting, image-generation
+  basics, deepfakes/safety, responsible school use, etc.) instead of just
+  the original "what is AI" basics. Switching tracks resets the quiz to
+  the matching set.
+- Fixed several pre-existing display bugs uncovered while building this:
+  a handful of elements (the Play tab's guess-result card, the quiz
+  "all done" screen, quiz feedback text, a couple of button rows, and the
+  Assign tool's generated-link block) used a CSS class that accidentally
+  overrode the browser's own "hidden" behavior, so they could render even
+  while meant to be hidden (most visibly, the Play tab showed a leftover
+  "7" result before any digit was ever drawn). All now hide correctly.
+
+## 2026-10-01 — "AI Basics" renamed to "AI Hub" and moved beside Oral Practice
+- Renamed the AI section from "AI Basics" to "AI Hub" throughout the app.
+- Removed it from the bottom navigation bar (back to 4 tabs: Practice, High
+  Scores, Statistics, Assign) and added it instead as a third tab right next
+  to Timed Practice / Oral Practice at the top of the Practice screen, so
+  it reads as a third kind of session a student can jump into.
+  Tapping it opens the same Learn / Play / Quiz screen as before, now with
+  a "‹ Back" button (matching History and Install-help) to return to
+  Practice, since it's no longer reachable from the bottom nav.
+- Replaced the header subheading "Abacus & Mental Math Practice" with
+  "Your Child's AI, Abacus & Mental Math Companion" and increased its font
+  size so it reads more clearly (it now wraps to two lines under the app
+  name instead of being squeezed onto one).
+
+## 2026-09-30 — New "AI Basics" section (Learn, Play, Quiz)
+- Added a 5th bottom-nav tab, "AI Basics", free for every visitor (not behind
+  the paywall), aimed at ages 4-10, with three parts:
+  - **Learn**: 4 short, read-aloud lesson cards explaining what AI is, how it
+    learns, and that it can make mistakes too — in very simple language.
+  - **Play — Draw-a-Number**: a real, working AI demo that runs entirely in
+    the browser. A child draws a digit 0-9 on a canvas, and a small neural
+    network (trained on scikit-learn's digits dataset, ~27KB of weights
+    embedded right in the page — no internet connection needed to run it)
+    guesses what they drew, speaks its guess aloud, and shows a confidence
+    star rating. "Was I right?" buttons let the child confirm either way,
+    reinforcing that AI can be wrong sometimes.
+  - **Quiz**: a 6-question multiple-choice quiz on AI basics, with big
+    tappable answers, instant right/wrong feedback (read aloud too), a
+    final score screen, and a retry button.
+- The Draw-a-Number recognizer is a genuinely tiny (64→48→10) model — a fun,
+  honest introduction to AI, not a production OCR system. Accuracy on
+  clearly-drawn digits is good but not perfect, which doubles as the lesson
+  that "AI can make mistakes too."
+
+## 2026-09-30 — Quote widened and enlarged
+- Moved the header quote out from beside the logo into its own full-width
+  line below the header, matching the width of the Timed/Oral tabs and
+  skill-tab strip beneath it, and increased its font size so it reads
+  clearly instead of being squeezed into the narrow title column.
+
+## 2026-09-30 — Header layout cleanup
+- Aligned the logo and menu/mute buttons to the top of the header instead of
+  centering them against the full height of the (now taller, 3-line) title
+  block, so the logo sits neatly beside "Little Star Kid Academy" instead of
+  floating lower, next to the quote. Shrank the logo slightly (38px → 32px)
+  to keep the header compact and balanced.
+
+## 2026-09-30 — Header quote, removed top video link
+- Removed the "▶ Watch a 30-second how-to video" link from the install tip
+  banner at the top of the app (the rest of that banner — the Android/iPhone
+  install steps and its close button — is unchanged). The "Watch install
+  video" option in the menu still opens the same install-tutorial screen, so
+  that video is still reachable, just not from the top banner.
+- Added a quote under the app name/subtitle in the header: "Learning never
+  exhausts the mind. Life is a cycle of learning, unlearning & relearning."
+  — Leonardo da Vinci.
+
+## 2026-09-29 — Freemium paywall re-added (Addition / Subtraction / Mix aware)
+- Brought back the freemium/member paywall that was removed earlier the same
+  day, rebuilt to match the new skill list: free visitors can practice every
+  skill — Addition, Subtraction, Mix, Multiply, Divide, Square, Square Root,
+  Percentage, Mean, Decimals — in both Timed and Oral modes, but only at
+  single-digit difficulty.
+- Logging in with the shared member username/password unlocks every digit
+  level (2-4 digits depending on the skill) on all ten skills. Login persists
+  on that device via local storage, and logging out re-locks it.
+- The lock banner and locked dropdowns clearly mark what needs a login, and
+  the login modal has a green "Contact us on WhatsApp to purchase full
+  access" button that opens a pre-filled WhatsApp chat to the teacher.
+- The Assign (teacher) tool stays fully open for everyone regardless of
+  login status, same as before.
+- Note: this is a shared username/password baked into the page, not real
+  per-customer accounts — anyone who has the credentials can log in from any
+  device, and the credentials are visible to anyone who inspects the page
+  source. It's a simple gate to encourage purchases, not a secure paywall.
+
 ## 2026-09-29 — Addition / Subtraction / Mix split, rows up to 100, paywall removed
 - Split the old combined "Add/Subtract" tab (with its Sums Type dropdown) into
   three separate skill tabs: Addition, Subtraction, and Mix (a random blend of
