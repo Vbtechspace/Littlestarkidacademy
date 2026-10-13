@@ -4,6 +4,24 @@ This file tracks the major milestones of the app so far. Git history in this
 folder starts today (see note at the bottom for why), but this changelog
 covers everything built before that too, so you have a full record either way.
 
+## 2026-10-14 — Level selector added to Print Practice Sheet
+
+- Added a **Level** dropdown (1–8) to the in-app Print Practice Sheet tool in
+  the Assign tab, right above the "Include answer key" checkbox. The chosen
+  level is printed as a purple "LEVEL N" badge in the top-right of the
+  worksheet's title bar, next to "Let's Practice `<Skill>` using Abacus" —
+  so sheets can be labeled and filed by level.
+- This is a printed label only; it doesn't change the digit/row difficulty
+  config used to generate the problems (those are still set independently
+  via the skill's own fields). If level-specific difficulty presets per
+  skill are wanted later, that can be added as a follow-up once the
+  level-to-config mapping is defined.
+
+## 2026-10-14 — Print Practice Sheet redesigned as a worksheet template
+- Redesigned the printed layout (both the in-app Print Practice Sheet tool and the standalone 10-sheet PDF pack, regenerated below) to match the structure of a reference worksheet image the user shared: a decorative title banner (original SVG art — a smiling-star mascot, a 3-bead abacus-rod motif, floating math symbols, and a circular page-number badge, in the app's own brand colors rather than the reference's specific illustrations), a bold title bar reading "Let's Practice `<Skill>` using Abacus", Roman-numeral sections (I, II, III...) with two parallel tables (A and B) each with its own TIME TAKEN / SCORE boxes and an "Ans" column, an ORALS strip (10 numbered cells) at the bottom, and an Instructor Signature line.
+- **In-app tool**: the chosen "No of Problems" count now splits as evenly as possible across the A/B columns under one section (e.g. 15 problems → 8 in column A, 7 in column B), instead of one flat numbered list.
+- **Standalone PDF pack**: each skill's difficulty levels are now its Roman-numeral sections, each with 8 rows per column (16 problems per level) instead of the previous flat 20-per-sheet/no-sections format — a skill with an odd number of levels (Percentage, Mean, Decimals, which have 3) gets its last level's tables doubled to 16 rows each so its final page isn't left half-empty. Total page count: 18 (previously a fixed 10 sheets).
+
 ## 2026-10-13 — In-app "Print practice sheet" tool (Assign tab) + Mean config bugfix
 - Added a **🖨️ Print practice sheet** button to the Assign (teacher) tab, right below the existing "Create practice set link" button. It reuses the same skill tabs and config fields already there (No of Digits/Rows, Multiplicand/Multiplicator Digits, Dividend/Divisor Digits, Percent Difficulty, No of Numbers, Sums Type, etc.) plus the existing "No of Problems" count (5/10/15/20), so picking a skill + settings + count and printing is now fully self-serve — no need to ask for a one-off sheet.
 - Generates the chosen number of problems with the exact same `GENERATORS` functions the rest of the app uses (same rules, fresh random seed each time — not tied to a replayable Assign link), then shows a clean, print-only A4 sheet (masthead with studio address, Name/Date/Score header, two-column numbered problem grid) and opens the browser's print dialog. Everything else on the page is hidden while printing via a `body.printing-sheet` class + `@media print` rule, then restored automatically on the browser's `afterprint` event.

@@ -636,6 +636,19 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
           <p class="assign-hint">Send this however you like — the link always plays the same problems.</p>
         </div>
         <p class="assign-hint" style="margin-top:14px;">— or skip the link and print a paper sheet with the settings above —</p>
+        <div class="field">
+          <label for="printLevel">Level (printed on the sheet)</label>
+          <select id="printLevel">
+            <option value="1">Level 1</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+            <option value="4">Level 4</option>
+            <option value="5">Level 5</option>
+            <option value="6">Level 6</option>
+            <option value="7">Level 7</option>
+            <option value="8">Level 8</option>
+          </select>
+        </div>
         <div class="field-checkbox">
           <label><input type="checkbox" id="printIncludeAnswers"> Include answer key</label>
         </div>
@@ -1829,6 +1842,93 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     return location.origin + location.pathname + '#' + token;
   }
 
+  var WS_PURPLE = '#53184F';
+  var WS_RED = '#DF2128';
+
+  function wsSvgBanner(pageNum){
+    return (
+      '<svg viewBox="0 0 900 130" class="ws-banner" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">' +
+      '<rect x="0" y="0" width="900" height="130" fill="#F5EDF7"/>' +
+      '<text x="120" y="50" font-size="42" fill="' + WS_PURPLE + '" opacity="0.15" font-weight="800" transform="rotate(-12 120 50)">+</text>' +
+      '<text x="705" y="105" font-size="46" fill="' + WS_RED + '" opacity="0.15" font-weight="800" transform="rotate(10 705 105)">&#215;</text>' +
+      '<text x="430" y="38" font-size="34" fill="' + WS_PURPLE + '" opacity="0.15" font-weight="800" transform="rotate(8 430 38)">&#247;</text>' +
+      '<circle cx="250" cy="95" r="10" fill="' + WS_RED + '" opacity="0.18"/>' +
+      '<circle cx="605" cy="30" r="7" fill="' + WS_PURPLE + '" opacity="0.18"/>' +
+      '<circle cx="800" cy="75" r="9" fill="' + WS_RED + '" opacity="0.15"/>' +
+      '<line x1="330" y1="95" x2="470" y2="95" stroke="' + WS_PURPLE + '" stroke-width="4" stroke-linecap="round" opacity="0.5"/>' +
+      '<circle cx="355" cy="95" r="9" fill="' + WS_RED + '"/>' +
+      '<circle cx="395" cy="95" r="9" fill="#FFC93C" stroke="' + WS_PURPLE + '" stroke-width="2"/>' +
+      '<circle cx="435" cy="95" r="9" fill="' + WS_RED + '"/>' +
+      '<g transform="translate(150,65) scale(1.05)">' +
+      '<polygon points="0,-40 9.4,-12.9 38,-12.4 15.2,4.9 23.5,32.4 0,16 -23.5,32.4 -15.2,4.9 -38,-12.4 -9.4,-12.9" fill="#FFC93C" stroke="' + WS_PURPLE + '" stroke-width="4" stroke-linejoin="round"/>' +
+      '<circle cx="-9" cy="-4" r="3.2" fill="' + WS_PURPLE + '"/>' +
+      '<circle cx="9" cy="-4" r="3.2" fill="' + WS_PURPLE + '"/>' +
+      '<path d="M -9 7 Q 0 14 9 7" stroke="' + WS_PURPLE + '" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="-15" cy="2" r="3.5" fill="' + WS_RED + '" opacity="0.45"/>' +
+      '<circle cx="15" cy="2" r="3.5" fill="' + WS_RED + '" opacity="0.45"/>' +
+      '</g>' +
+      '<circle cx="860" cy="35" r="20" fill="#1a1a1a"/>' +
+      '<text x="860" y="43" font-size="20" font-weight="800" fill="#fff" text-anchor="middle">' + pageNum + '</text>' +
+      '</svg>'
+    );
+  }
+
+  function wsRenderTable(rows, colLetter, includeAnswers){
+    var trs = rows.map(function(r){
+      var ans = includeAnswers ? formatAnswer(r.decimals, r.answer) : '';
+      return '<tr><td>' + r.prompt + '</td><td class="ws-ans">' + ans + '</td></tr>';
+    }).join('');
+    return (
+      '<table class="ws-table"><thead><tr><th>' + colLetter + '</th>' +
+      '<th class="ws-ans-head">Ans</th></tr></thead><tbody>' + trs + '</tbody></table>'
+    );
+  }
+
+  function wsTableBlock(rows, colLetter, includeAnswers){
+    return (
+      '<div class="ws-table-block">' +
+      '<div class="ws-meta-row"><span>TIME TAKEN</span><span class="ws-line"></span></div>' +
+      '<div class="ws-meta-row"><span>SCORE</span><span class="ws-line"></span></div>' +
+      wsRenderTable(rows, colLetter, includeAnswers) +
+      '</div>'
+    );
+  }
+
+  function wsRenderOrals(){
+    var cells = '';
+    for (var i = 1; i <= 10; i++) cells += '<div class="ws-orals-cell">' + i + '</div>';
+    return '<div class="ws-orals"><div class="ws-orals-label">ORALS</div>' + cells + '</div>';
+  }
+
+  var WS_STYLE = (
+    '#printSheetOverlay{ font-family:Arial,Helvetica,sans-serif; color:#1a1a1a; background:#fff; }' +
+    '#printSheetOverlay .ws-banner{ width:100%; height:72px; display:block; }' +
+    '#printSheetOverlay .ws-titlebar{ position:relative; text-align:center; font-size:19px; font-weight:800; color:#1a1a1a;' +
+      ' border-top:4px solid ' + WS_PURPLE + '; border-bottom:4px solid ' + WS_PURPLE + '; padding:7px 95px; margin-bottom:8px; background:#fff; }' +
+    '#printSheetOverlay .ws-level-badge{ position:absolute; right:8px; top:50%; transform:translateY(-50%);' +
+      ' background:' + WS_PURPLE + '; color:#fff; font-size:12px; font-weight:800; padding:5px 12px; border-radius:999px; letter-spacing:.5px; white-space:nowrap; }' +
+    '#printSheetOverlay .ws-section{ display:flex; gap:8px; margin-bottom:8px; padding:0 8px; }' +
+    '#printSheetOverlay .ws-roman{ flex:0 0 34px; display:flex; align-items:center; justify-content:center;' +
+      ' font-size:22px; font-weight:800; color:' + WS_PURPLE + '; border:2px solid ' + WS_PURPLE + '; border-radius:6px; background:#F5EDF7; }' +
+    '#printSheetOverlay .ws-tables{ flex:1; display:flex; gap:10px; min-width:0; }' +
+    '#printSheetOverlay .ws-table-block{ flex:1; min-width:0; }' +
+    '#printSheetOverlay .ws-meta-row{ display:flex; justify-content:space-between; align-items:center; border:1px solid #ccc;' +
+      ' border-radius:4px; padding:2px 8px; margin-bottom:3px; font-size:10px; font-weight:700; color:#444; }' +
+    '#printSheetOverlay .ws-meta-row .ws-line{ flex:1; border-bottom:1px solid #999; margin-left:10px; height:10px; }' +
+    '#printSheetOverlay table.ws-table{ width:100%; border-collapse:collapse; font-size:12px; }' +
+    '#printSheetOverlay table.ws-table th{ background:' + WS_PURPLE + '; color:#fff; font-weight:800; padding:3px 6px; border:1px solid ' + WS_PURPLE + '; }' +
+    '#printSheetOverlay table.ws-table th.ws-ans-head{ width:34%; }' +
+    '#printSheetOverlay table.ws-table td{ border:1px solid #c9b8cc; padding:3.5px 6px; }' +
+    '#printSheetOverlay table.ws-table td.ws-ans{ text-align:center; color:#1a7a3c; font-weight:700; }' +
+    '#printSheetOverlay table.ws-table tr:nth-child(even) td{ background:#FBF7FC; }' +
+    '#printSheetOverlay .ws-orals{ display:flex; align-items:stretch; border:2px solid ' + WS_PURPLE + '; border-radius:6px; overflow:hidden; margin:6px 8px 0; }' +
+    '#printSheetOverlay .ws-orals-label{ flex:0 0 70px; background:' + WS_PURPLE + '; color:#fff; font-weight:800; display:flex;' +
+      ' align-items:center; justify-content:center; font-size:13px; letter-spacing:1px; }' +
+    '#printSheetOverlay .ws-orals-cell{ flex:1; border-left:1px solid #d8cadb; display:flex; align-items:center; justify-content:center;' +
+      ' font-weight:700; color:#666; font-size:11px; height:26px; }' +
+    '#printSheetOverlay .ws-footer{ display:flex; justify-content:space-between; margin:10px 8px 0; font-size:11px; color:#333; }'
+  );
+
   function buildPrintSheetMarkup(){
     var skill = state.assignSkill;
     var cfg = state.assignCfg;
@@ -1839,52 +1939,29 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     var gen = GENERATORS[skill];
     var rows = [];
     for (var i = 0; i < count; i++) rows.push(gen(cfg, rng));
+    var aCount = Math.ceil(count / 2);
+    var rowsA = rows.slice(0, aCount);
+    var rowsB = rows.slice(aCount);
+    var level = parseInt(els.printLevel.value, 10) || 1;
 
-    var settingsParts = [];
-    fieldsFor(skill, 'assign').forEach(function(f){
-      if (f.key === 'count') return;
-      var opt = null;
-      (f.options || []).forEach(function(o){ if (String(o[0]) === String(cfg[f.key])) opt = o; });
-      settingsParts.push(f.label + ': ' + (opt ? opt[1] : cfg[f.key]));
-    });
-
-    var problemsHtml = rows.map(function(r, idx){
-      var ans = includeAnswers
-        ? '<span class="ps-answer">' + formatAnswer(r.decimals, r.answer) + '</span>'
-        : '<span class="ps-answer-line"></span>';
-      return '<div class="ps-problem"><span class="ps-num">' + (idx + 1) + '.</span>' +
-             '<span class="ps-prompt">' + r.prompt + '</span>' + ans + '</div>';
-    }).join('');
+    var section = (
+      '<div class="ws-section">' +
+      '<div class="ws-roman">I</div>' +
+      '<div class="ws-tables">' +
+      wsTableBlock(rowsA, 'A', includeAnswers) +
+      wsTableBlock(rowsB, 'B', includeAnswers) +
+      '</div></div>'
+    );
 
     return (
-      '<style>' +
-      '#printSheetOverlay{ font-family:Arial,Helvetica,sans-serif; color:#1a1a1a; background:#fff; padding:14mm 12mm; }' +
-      '#printSheetOverlay .ps-masthead{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:3px solid #53184F; padding-bottom:6px; margin-bottom:8px; }' +
-      '#printSheetOverlay .ps-org{ font-size:15px; font-weight:700; color:#53184F; }' +
-      '#printSheetOverlay .ps-sub{ font-size:10.5px; color:#555; }' +
-      '#printSheetOverlay .ps-title{ font-size:21px; font-weight:800; margin:4px 0 2px; }' +
-      '#printSheetOverlay .ps-settings{ font-size:11px; color:#333; margin:2px 0 10px; }' +
-      '#printSheetOverlay .ps-meta{ display:flex; gap:22px; font-size:11.5px; border:1px solid #ccc; border-radius:6px; padding:7px 12px; margin-bottom:14px; }' +
-      '#printSheetOverlay .ps-meta .line{ display:inline-block; border-bottom:1px solid #888; min-width:90px; margin-left:6px; }' +
-      '#printSheetOverlay .ps-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; }' +
-      '#printSheetOverlay .ps-problem{ display:flex; align-items:baseline; gap:6px; border:1px solid #ddd; border-radius:5px; padding:6px 8px; font-size:13px; break-inside:avoid; }' +
-      '#printSheetOverlay .ps-num{ font-weight:700; color:#53184F; min-width:20px; }' +
-      '#printSheetOverlay .ps-prompt{ flex:1; }' +
-      '#printSheetOverlay .ps-answer-line{ display:inline-block; border-bottom:1px solid #999; min-width:46px; }' +
-      '#printSheetOverlay .ps-answer{ font-weight:700; color:#1a7a3c; min-width:30px; }' +
-      '</style>' +
-      '<div class="ps-masthead">' +
-        '<div><div class="ps-org">Little Star Kid Academy</div><div class="ps-sub">Abacus &amp; Mental Math — Printable Practice Sheet</div></div>' +
-        '<div class="ps-sub" style="text-align:right">JC Bose Road, Opp. P&amp;T Gate, near Landmark Hotel,<br>Lalpur, Ranchi 834001</div>' +
-      '</div>' +
-      '<div class="ps-title">' + SKILL_LABEL[skill] + '</div>' +
-      '<div class="ps-settings">' + settingsParts.join(' &nbsp;·&nbsp; ') + ' &nbsp;·&nbsp; ' + count + ' problems</div>' +
-      '<div class="ps-meta">' +
-        '<span>Name:<span class="line"></span></span>' +
-        '<span>Date:<span class="line"></span></span>' +
-        '<span>Score: ___ / ' + count + '</span>' +
-      '</div>' +
-      '<div class="ps-grid">' + problemsHtml + '</div>'
+      '<style>' + WS_STYLE + '</style>' +
+      wsSvgBanner(1) +
+      '<div class="ws-titlebar">Let’s Practice ' + SKILL_LABEL[skill] + ' using Abacus' +
+        '<span class="ws-level-badge">LEVEL ' + level + '</span></div>' +
+      section +
+      wsRenderOrals() +
+      '<div class="ws-footer"><span>Instructor Signature.......................</span>' +
+      '<span>Little Star Kid Academy</span></div>'
     );
   }
 
@@ -2024,7 +2101,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
      'summaryScore','summaryAccuracy','summaryDetail','btnPracticeAgain','btnBackToSetup',
      'btnHistoryBack','historyList','highScoresList','statCards','statBars',
      'assignSkillTabs','assignConfigForm','assignLabel','btnCreateAssign','assignResultBlock','assignLink','btnCopyLink','btnShareWa',
-     'printIncludeAnswers','btnPrintSheet',
+     'printIncludeAnswers','btnPrintSheet','printLevel',
      'assignResultScore','assignResultMsg','studentName','nameHint','btnSendWa','waHint',
      'btnInstallHelpBack',
      'bottomNav','sparkleLayer',
