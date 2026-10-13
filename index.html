@@ -336,6 +336,13 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   padding:9px 10px; border-radius:10px; border:2px solid var(--rodline); background:var(--surface-2); color:var(--text);
 }
 .assign-hint{ font-size:.78rem; font-weight:700; color:var(--text-muted); text-align:center; }
+.field-checkbox{ display:flex; align-items:center; gap:8px; font-size:.88rem; font-weight:600; margin:10px 0; }
+.field-checkbox input{ width:18px; height:18px; accent-color:var(--accent); }
+#printSheetOverlay{ display:none; }
+@media print{
+  body.printing-sheet > *:not(#printSheetOverlay){ display:none !important; }
+  body.printing-sheet #printSheetOverlay{ display:block !important; }
+}
 .name-input{
   width:20ch; text-align:center; font-family:var(--font-display); font-size:.95rem;
   padding:9px 10px; border-radius:10px; border:2px solid var(--rodline); background:var(--surface-2); color:var(--text);
@@ -628,6 +635,11 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
           </div>
           <p class="assign-hint">Send this however you like — the link always plays the same problems.</p>
         </div>
+        <p class="assign-hint" style="margin-top:14px;">— or skip the link and print a paper sheet with the settings above —</p>
+        <div class="field-checkbox">
+          <label><input type="checkbox" id="printIncludeAnswers"> Include answer key</label>
+        </div>
+        <button class="btn btn-outline btn-block" id="btnPrintSheet" type="button">🖨️ Print practice sheet</button>
       </div>
     </section>
 
@@ -869,7 +881,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
       { key:'baseDigits', label:'Base Digits', type:'select', options:intOpts(1,3), def:'2', gated:true }
     ],
     mean: [
-      { key:'count', label:'No of Numbers', type:'select', options:intOpts(3,5), def:'3' },
+      { key:'avgCount', label:'No of Numbers', type:'select', options:intOpts(3,5), def:'3' },
       { key:'digits', label:'No of Digits', type:'select', options:intOpts(1,2), def:'1', gated:true }
     ],
     decimals: [
@@ -1047,7 +1059,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
       return { prompt: pct + '% of ' + formatNumber(base), answer: answer, decimals: 0 };
     },
     mean: function(cfg, rng){
-      var count = parseInt(cfg.count, 10) || 3;
+      var count = parseInt(cfg.avgCount, 10) || 3;
       var digits = parseInt(cfg.digits, 10) || 1;
       var nums = [], sum = 0;
       for (var tries = 0; tries < 25; tries++){
@@ -1817,6 +1829,77 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     return location.origin + location.pathname + '#' + token;
   }
 
+  function buildPrintSheetMarkup(){
+    var skill = state.assignSkill;
+    var cfg = state.assignCfg;
+    var count = parseInt(cfg.count, 10) || 10;
+    var includeAnswers = !!els.printIncludeAnswers.checked;
+    var seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
+    var rng = mulberry32(seed);
+    var gen = GENERATORS[skill];
+    var rows = [];
+    for (var i = 0; i < count; i++) rows.push(gen(cfg, rng));
+
+    var settingsParts = [];
+    fieldsFor(skill, 'assign').forEach(function(f){
+      if (f.key === 'count') return;
+      var opt = null;
+      (f.options || []).forEach(function(o){ if (String(o[0]) === String(cfg[f.key])) opt = o; });
+      settingsParts.push(f.label + ': ' + (opt ? opt[1] : cfg[f.key]));
+    });
+
+    var problemsHtml = rows.map(function(r, idx){
+      var ans = includeAnswers
+        ? '<span class="ps-answer">' + formatAnswer(r.decimals, r.answer) + '</span>'
+        : '<span class="ps-answer-line"></span>';
+      return '<div class="ps-problem"><span class="ps-num">' + (idx + 1) + '.</span>' +
+             '<span class="ps-prompt">' + r.prompt + '</span>' + ans + '</div>';
+    }).join('');
+
+    return (
+      '<style>' +
+      '#printSheetOverlay{ font-family:Arial,Helvetica,sans-serif; color:#1a1a1a; background:#fff; padding:14mm 12mm; }' +
+      '#printSheetOverlay .ps-masthead{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:3px solid #53184F; padding-bottom:6px; margin-bottom:8px; }' +
+      '#printSheetOverlay .ps-org{ font-size:15px; font-weight:700; color:#53184F; }' +
+      '#printSheetOverlay .ps-sub{ font-size:10.5px; color:#555; }' +
+      '#printSheetOverlay .ps-title{ font-size:21px; font-weight:800; margin:4px 0 2px; }' +
+      '#printSheetOverlay .ps-settings{ font-size:11px; color:#333; margin:2px 0 10px; }' +
+      '#printSheetOverlay .ps-meta{ display:flex; gap:22px; font-size:11.5px; border:1px solid #ccc; border-radius:6px; padding:7px 12px; margin-bottom:14px; }' +
+      '#printSheetOverlay .ps-meta .line{ display:inline-block; border-bottom:1px solid #888; min-width:90px; margin-left:6px; }' +
+      '#printSheetOverlay .ps-grid{ display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; }' +
+      '#printSheetOverlay .ps-problem{ display:flex; align-items:baseline; gap:6px; border:1px solid #ddd; border-radius:5px; padding:6px 8px; font-size:13px; break-inside:avoid; }' +
+      '#printSheetOverlay .ps-num{ font-weight:700; color:#53184F; min-width:20px; }' +
+      '#printSheetOverlay .ps-prompt{ flex:1; }' +
+      '#printSheetOverlay .ps-answer-line{ display:inline-block; border-bottom:1px solid #999; min-width:46px; }' +
+      '#printSheetOverlay .ps-answer{ font-weight:700; color:#1a7a3c; min-width:30px; }' +
+      '</style>' +
+      '<div class="ps-masthead">' +
+        '<div><div class="ps-org">Little Star Kid Academy</div><div class="ps-sub">Abacus &amp; Mental Math — Printable Practice Sheet</div></div>' +
+        '<div class="ps-sub" style="text-align:right">JC Bose Road, Opp. P&amp;T Gate, near Landmark Hotel,<br>Lalpur, Ranchi 834001</div>' +
+      '</div>' +
+      '<div class="ps-title">' + SKILL_LABEL[skill] + '</div>' +
+      '<div class="ps-settings">' + settingsParts.join(' &nbsp;·&nbsp; ') + ' &nbsp;·&nbsp; ' + count + ' problems</div>' +
+      '<div class="ps-meta">' +
+        '<span>Name:<span class="line"></span></span>' +
+        '<span>Date:<span class="line"></span></span>' +
+        '<span>Score: ___ / ' + count + '</span>' +
+      '</div>' +
+      '<div class="ps-grid">' + problemsHtml + '</div>'
+    );
+  }
+
+  function printPracticeSheet(){
+    var overlay = document.getElementById('printSheetOverlay');
+    if (!overlay){
+      overlay = document.createElement('div');
+      overlay.id = 'printSheetOverlay';
+      document.body.appendChild(overlay);
+    }
+    overlay.innerHTML = buildPrintSheetMarkup();
+    document.body.classList.add('printing-sheet');
+    window.print();
+  }
+
   function parseAssignmentHash(){
     var h = location.hash.replace(/^#/, '');
     if (!h) return null;
@@ -1941,6 +2024,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
      'summaryScore','summaryAccuracy','summaryDetail','btnPracticeAgain','btnBackToSetup',
      'btnHistoryBack','historyList','highScoresList','statCards','statBars',
      'assignSkillTabs','assignConfigForm','assignLabel','btnCreateAssign','assignResultBlock','assignLink','btnCopyLink','btnShareWa',
+     'printIncludeAnswers','btnPrintSheet',
      'assignResultScore','assignResultMsg','studentName','nameHint','btnSendWa','waHint',
      'btnInstallHelpBack',
      'bottomNav','sparkleLayer',
@@ -2090,6 +2174,10 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
         (els.assignLabel.value.trim() ? (' — ' + els.assignLabel.value.trim()) : '') + ':\n' + link
       );
       els.btnShareWa.href = 'https://wa.me/?text=' + waText;
+    });
+    els.btnPrintSheet.addEventListener('click', printPracticeSheet);
+    window.addEventListener('afterprint', function(){
+      document.body.classList.remove('printing-sheet');
     });
     els.btnCopyLink.addEventListener('click', function(){
       var val = els.assignLink.value;

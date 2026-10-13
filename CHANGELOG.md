@@ -4,6 +4,12 @@ This file tracks the major milestones of the app so far. Git history in this
 folder starts today (see note at the bottom for why), but this changelog
 covers everything built before that too, so you have a full record either way.
 
+## 2026-10-13 — In-app "Print practice sheet" tool (Assign tab) + Mean config bugfix
+- Added a **🖨️ Print practice sheet** button to the Assign (teacher) tab, right below the existing "Create practice set link" button. It reuses the same skill tabs and config fields already there (No of Digits/Rows, Multiplicand/Multiplicator Digits, Dividend/Divisor Digits, Percent Difficulty, No of Numbers, Sums Type, etc.) plus the existing "No of Problems" count (5/10/15/20), so picking a skill + settings + count and printing is now fully self-serve — no need to ask for a one-off sheet.
+- Generates the chosen number of problems with the exact same `GENERATORS` functions the rest of the app uses (same rules, fresh random seed each time — not tied to a replayable Assign link), then shows a clean, print-only A4 sheet (masthead with studio address, Name/Date/Score header, two-column numbered problem grid) and opens the browser's print dialog. Everything else on the page is hidden while printing via a `body.printing-sheet` class + `@media print` rule, then restored automatically on the browser's `afterprint` event.
+- Added an **"Include answer key"** checkbox (unchecked by default — problems only, matching how the one-off printable PDF pack was built) so the teacher can opt into a sheet with answers shown instead of blank lines, e.g. for self-checking or a key copy.
+- **Bugfix found while building this**: the Mean skill's own "No of Numbers" field and the Oral/Assign tabs' trailing "No of Sums"/"No of Problems" field both used the same config key (`count`), so in Oral practice and the Assign tool (anywhere outside Timed practice) they silently overwrote each other — Mean problems were actually averaging however many numbers "No of Sums"/"No of Problems" was set to (e.g. 10) instead of the "No of Numbers" dropdown's own value (e.g. 3), even though the dropdown visually suggested otherwise. Renamed Mean's field to its own key (`avgCount`) so the two no longer collide; verified fixed in Timed, Oral, and Assign/Print.
+
 ## 2026-10-05 — Reverted to the pre-AI-Hub version; Multiply/Divide digits raised to 5
 - At the user's request, the live app was rolled back to the version just
   before the "AI Hub" rename and the 10-module AI course (i.e. back to the
