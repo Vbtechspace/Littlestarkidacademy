@@ -4,6 +4,83 @@ This file tracks the major milestones of the app so far. Git history in this
 folder starts today (see note at the bottom for why), but this changelog
 covers everything built before that too, so you have a full record either way.
 
+## 2026-11-06 (later) — Bright kid-friendly colours, and 5 free questions in Vedic Maths & Phonics
+
+- **New colour scheme** (light and dark mode), built on the palette supplied by
+  the user: **#D6FF00 lime, #A6FF4D light green, #00D084 emerald, #1B1B1B
+  charcoal, #F7F7F7 off-white**. Off-white page with soft lime/green glows and
+  white cards; charcoal text; emerald buttons with charcoal text and a raised
+  edge; selected tabs and the active bottom-nav button in lime with a charcoal
+  outline; a four-block lime / light green / emerald / charcoal stripe across the
+  top; chapter numbers cycling lime, light green and emerald. Each category has
+  its own colour on its tab: Abacus lime, Vedic Maths light green, Phonics
+  emerald. Dark mode uses the charcoal as the background with lime as the
+  highlight colour. Lime and emerald are too light to read as text on white, so
+  coloured text uses a deeper emerald shade (#007A4D) in light mode; error
+  messages keep a red. Text and button contrast was checked in both modes. The
+  logo and the printable worksheets (Print practice sheet) keep the original
+  purple/red academy colours.
+- Fixed the Draw-a-Number pen colour: it is now always charcoal, because the
+  drawing pad is always white (a light pen colour in dark mode would not show).
+- **Free vs member in Vedic Maths and Phonics practice**: free visitors can run
+  **5-question** rounds only. 10, 15 and 20 are shown with a 🔒 and unlock with
+  the member login (same shared login as the Abacus levels). A lock banner with a
+  "Log in" button explains it. The cap is also enforced when a round is started
+  (including "Practice Again"), so it cannot be bypassed. Lessons, worked
+  examples and "Try it yourself" stay open to everyone.
+- The Chapter picker on the practice tab now has the full row so "Mixed — all
+  chapters" is no longer cut off.
+- `manifest.json` theme/background colours updated to match (#00D084 / #F7F7F7;
+  only affects newly installed copies of the app).
+
+## 2026-11-06 — New categories: Vedic Maths and Phonics
+
+- The Practice (home) screen now opens with a **category switcher: 🧮 Abacus ·
+  ✨ Vedic Maths · 🔤 Phonics**. Abacus is unchanged (it is the same screen as
+  before, just inside its own tab, including the free/member lock banner).
+  Vedic Maths and Phonics are open to everyone — no login needed.
+- Each new category has two tabs: **📖 Learn** (chapter by chapter) and
+  **✏️ Practice** (pick one chapter or "Mixed — all chapters", and 5/10/15/20
+  questions).
+- **Vedic Maths — 10 chapters**: 1 Add & Subtract Near Round Numbers · 2 Multiply
+  by 5 and 50 · 3 Multiply by 25 · 4 Multiply by 11 · 5 Multiply by 9 and 99 ·
+  6 All from 9, Last from 10 (Nikhilam) · 7 Squares of Numbers Ending in 5
+  (Ekadhikena Purvena) · 8 Same Tens, Units Add to 10 (Antyayor Dashake'pi) ·
+  9 Multiply Numbers Close to 100 (Nikhilam) · 10 Digit Sum: Check Your Answers.
+  Each lesson page has the trick in plain steps, a one-line memory tip, three
+  worked examples that reveal one step at a time ("Show next step ›"), three
+  live "Try it yourself" questions (the wrong-answer feedback shows the trick
+  applied), a Read-aloud button, and a "Practice this chapter" shortcut. Practice
+  uses the normal typed-answer screen; a wrong answer shows the correct answer
+  plus the trick line for that exact question.
+- **Phonics — 8 chapters**: 1 Letter Sounds s a t i p n · 2 c k e h r m d ·
+  3 g o u l f b · 4 Blending: Make Short Words (c-a-t) · 5 Digraphs sh ch th ng ·
+  6 Blends (cl fl st tr dr cr sp fr pl sl) · 7 The Magic E (a_e i_e o_e u_e) ·
+  8 Vowel Teams (ai ee oa oo). Learn pages are tap-to-hear sound cards with
+  emoji key words (the sound is highlighted inside each word) plus a "Play all"
+  button. Practice is tap-the-answer: "Which picture starts with …?", "… starts
+  with which sound?", "Which word matches the picture?" and "Blend the sounds,
+  which picture is it?", with green/red feedback and the word spoken after each
+  answer. Pictures are emoji (no image files, works offline).
+- Results from both categories feed the existing **History**, **High Scores**
+  (per chapter) and **Statistics** (a Vedic Maths bar and a Phonics bar), and
+  chapter cards show a best-score badge (✓ once a round reaches 70%+).
+  "Reset my stats" clears them too.
+- Quality checks: every Vedic question generator was compared against an
+  independent calculator on 40,030 random problems (0 mismatches); the Phonics
+  generators were checked on 15,000 questions for exactly one correct choice and
+  no ambiguous distractors (0 problems). Also tested end to end in a browser at
+  phone size (light and dark mode) with the existing Abacus, paywall, Oral,
+  Assign-link and Print Level features re-verified.
+- Known limit: phonics sounds are spoken by the phone's built-in voice, so
+  isolated sounds ("sss", "kuh") can sound a little robotic; the spoken
+  spellings live in `PH_SAY` / each sound card's `say` field if one reads badly.
+  Recording the teacher's own voice would be the upgrade if wanted.
+- Note: the working folder was rebuilt from backups after a workspace reset, so
+  this git history restarts from "Baseline snapshot" + "Restore working tree";
+  the individual commits between those two points are summarised in the entries
+  below instead.
+
 ## 2026-10-14 — Level selector added to Print Practice Sheet
 
 - Added a **Level** dropdown (1–8) to the in-app Print Practice Sheet tool in

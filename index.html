@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon-32.png" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#53184F">
+<meta name="theme-color" content="#00D084">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -26,25 +26,48 @@
 <style>
 
   :root{
-    --bg:#F6F3FB;
+    /* palette supplied by the user */
+    --p-lime:#D6FF00;
+    --p-lg:#A6FF4D;
+    --p-em:#00D084;
+    --p-ink:#1B1B1B;
+    --p-paper:#F7F7F7;
+    /* theme (light) */
+    --bg:#F7F7F7;
+    --bg-grad:
+      radial-gradient(520px 320px at 6% -4%, rgba(214,255,0,.34), transparent 70%),
+      radial-gradient(480px 300px at 100% 8%, rgba(0,208,132,.16), transparent 70%),
+      radial-gradient(560px 380px at 0% 100%, rgba(166,255,77,.22), transparent 70%);
     --surface:#FFFFFF;
-    --surface-2:#EFEAF6;
-    --text:#241129;
-    --text-muted:#6E6178;
-    --accent:#53184F;
+    --surface-2:#F1FFC9;
+    --track:#E4E4E4;
+    --text:#1B1B1B;
+    --text-muted:#5A5A5A;
+    --accent:#007A4D;
+    --accent-deep:#005C3A;
     --accent-ink:#FFFFFF;
-    --success:#1F9D6C;
-    --success-bg:#E3F5EC;
-    --error:#D6293A;
-    --error-bg:#FBE7E9;
+    --btn:#00D084;
+    --btn-ink:#1B1B1B;
+    --btn-edge:#1B1B1B;
+    --sel:#D6FF00;
+    --sel-ink:#1B1B1B;
+    --sel-edge:#1B1B1B;
+    --line-strong:#1B1B1B;
+    --stripe-4:#1B1B1B;
+    --bar-edge:rgba(27,27,27,.55);
+    --success:#00734A;
+    --success-bg:#D9FBE8;
+    --error:#C81E31;
+    --error-bg:#FFE4E8;
+    --c1:#D6FF00; --c2:#A6FF4D; --c3:#00D084; --c4:#D6FF00; --c5:#A6FF4D; --c6:#00D084;
     --frame:#A97644;
     --frame-dark:#7C5530;
-    --rodline:rgba(40,20,10,.35);
-    --heaven-1:#D8232B;
-    --heaven-2:#F0666B;
-    --earth-1:#53184F;
-    --earth-2:#8C4A86;
-    --card-shadow:0 1px 2px rgba(36,17,41,.05), 0 10px 24px rgba(36,17,41,.10);
+    --rodline:rgba(27,27,27,.20);
+    --heaven-1:#00D084;
+    --heaven-2:#A6FF4D;
+    --earth-1:#1B1B1B;
+    --earth-2:#5A5A5A;
+    --card-shadow:0 1px 2px rgba(27,27,27,.06), 0 8px 20px rgba(27,27,27,.10);
     --bead:34px;
     --gap:9px;
     --bar-h:11px;
@@ -55,48 +78,78 @@
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#17101C;
-      --surface:#241A2C;
-      --surface-2:#2D2135;
-      --text:#F4EEF7;
-      --text-muted:#BBA9C4;
-      --accent:#9B4F93;
-      --accent-ink:#FFFFFF;
-      --success:#57D699;
-      --success-bg:#173a2c;
-      --error:#FF6B6B;
-      --error-bg:#3d1c26;
+      --bg:#1B1B1B;
+      --bg-grad:
+        radial-gradient(520px 320px at 6% -4%, rgba(214,255,0,.10), transparent 70%),
+        radial-gradient(480px 300px at 100% 8%, rgba(0,208,132,.10), transparent 70%),
+        radial-gradient(560px 380px at 0% 100%, rgba(166,255,77,.07), transparent 70%);
+      --surface:#262626;
+      --surface-2:#333333;
+      --track:#3D3D3D;
+      --text:#F7F7F7;
+      --text-muted:#B9B9B9;
+      --accent:#D6FF00;
+      --accent-deep:#9BB800;
+      --accent-ink:#1B1B1B;
+      --btn:#00D084;
+      --btn-ink:#1B1B1B;
+      --btn-edge:#00855A;
+      --sel:#D6FF00;
+      --sel-ink:#1B1B1B;
+      --sel-edge:#7C9400;
+      --line-strong:#D6FF00;
+      --stripe-4:#F7F7F7;
+      --bar-edge:transparent;
+      --success:#00D084;
+      --success-bg:#0F3A2B;
+      --error:#FF7B8A;
+      --error-bg:#3D1C26;
       --frame:#C58C55;
       --frame-dark:#8A5C31;
-      --rodline:rgba(10,5,15,.5);
-      --heaven-1:#FF6B63;
-      --heaven-2:#FF9C93;
-      --earth-1:#9B4F93;
-      --earth-2:#C17BB8;
-      --card-shadow:0 1px 2px rgba(0,0,0,.30), 0 10px 26px rgba(0,0,0,.45);
+      --rodline:rgba(247,247,247,.20);
+      --heaven-1:#D6FF00;
+      --heaven-2:#A6FF4D;
+      --earth-1:#00D084;
+      --earth-2:#A6FF4D;
+      --card-shadow:0 1px 2px rgba(0,0,0,.40), 0 10px 26px rgba(0,0,0,.50);
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#17101C;
-    --surface:#241A2C;
-    --surface-2:#2D2135;
-    --text:#F4EEF7;
-    --text-muted:#BBA9C4;
-    --accent:#9B4F93;
-    --accent-ink:#FFFFFF;
-    --success:#57D699;
-    --success-bg:#173a2c;
-    --error:#FF6B6B;
-    --error-bg:#3d1c26;
+    --bg:#1B1B1B;
+    --bg-grad:
+      radial-gradient(520px 320px at 6% -4%, rgba(214,255,0,.10), transparent 70%),
+      radial-gradient(480px 300px at 100% 8%, rgba(0,208,132,.10), transparent 70%),
+      radial-gradient(560px 380px at 0% 100%, rgba(166,255,77,.07), transparent 70%);
+    --surface:#262626;
+    --surface-2:#333333;
+    --track:#3D3D3D;
+    --text:#F7F7F7;
+    --text-muted:#B9B9B9;
+    --accent:#D6FF00;
+    --accent-deep:#9BB800;
+    --accent-ink:#1B1B1B;
+    --btn:#00D084;
+    --btn-ink:#1B1B1B;
+    --btn-edge:#00855A;
+    --sel:#D6FF00;
+    --sel-ink:#1B1B1B;
+    --sel-edge:#7C9400;
+    --line-strong:#D6FF00;
+    --stripe-4:#F7F7F7;
+    --bar-edge:transparent;
+    --success:#00D084;
+    --success-bg:#0F3A2B;
+    --error:#FF7B8A;
+    --error-bg:#3D1C26;
     --frame:#C58C55;
     --frame-dark:#8A5C31;
-    --rodline:rgba(10,5,15,.5);
-    --heaven-1:#FF6B63;
-    --heaven-2:#FF9C93;
-    --earth-1:#9B4F93;
-    --earth-2:#C17BB8;
-    --card-shadow:0 1px 2px rgba(0,0,0,.30), 0 10px 26px rgba(0,0,0,.45);
+    --rodline:rgba(247,247,247,.20);
+    --heaven-1:#D6FF00;
+    --heaven-2:#A6FF4D;
+    --earth-1:#00D084;
+    --earth-2:#A6FF4D;
+    --card-shadow:0 1px 2px rgba(0,0,0,.40), 0 10px 26px rgba(0,0,0,.50);
     color-scheme: dark;
   }
   @media (max-width:480px){
@@ -456,6 +509,199 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 .ai-quiz-choice.is-wrong{ background:var(--error-bg); border-color:var(--error); color:var(--error); }
 .ai-quiz-choice.is-disabled{ opacity:.6; cursor:default; }
 
+/* ---------- categories: Abacus / Vedic Maths / Phonics ---------- */
+.cat-tabs{ display:flex; gap:8px; }
+.cat-tab{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:var(--surface); border:2px solid var(--surface-2); border-radius:16px; padding:9px 4px 8px;
+  font-family:var(--font-display); font-weight:800; font-size:.8rem; color:var(--text-muted); cursor:pointer;
+  box-shadow:var(--card-shadow);
+}
+.cat-tab .cat-ic{ font-size:1.35rem; line-height:1; }
+.cat-tab[aria-pressed="true"]{ border-color:var(--accent); color:var(--text); }
+.cat-panel{ display:flex; flex-direction:column; gap:14px; }
+.cat-panel[hidden]{ display:none; }
+.cat-pane[hidden]{ display:none; }
+.cat-pane{ display:flex; flex-direction:column; gap:14px; }
+.cat-intro h2{ font-size:1.15rem; }
+.cat-intro p{ font-size:.85rem; font-weight:700; color:var(--text-muted); margin-top:2px; line-height:1.4; }
+
+.ch-list{ display:flex; flex-direction:column; gap:10px; }
+.ch-card{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:var(--surface); border:1px solid var(--surface-2); border-radius:16px; padding:11px 12px;
+  box-shadow:var(--card-shadow); cursor:pointer; font-family:var(--font-body); color:var(--text);
+}
+.ch-card:active{ transform:translateY(1px); }
+.ch-num{
+  flex:none; width:30px; height:30px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+  display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:.88rem;
+}
+.ch-ic{ flex:none; font-size:1.5rem; line-height:1; }
+.ch-main{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.ch-title{ font-family:var(--font-display); font-weight:800; font-size:.95rem; line-height:1.25; }
+.ch-short{ font-size:.76rem; font-weight:700; color:var(--text-muted); line-height:1.35; }
+.ch-badge{ flex:none; font-size:.7rem; font-weight:800; color:var(--success); background:var(--success-bg); border-radius:999px; padding:3px 8px; white-space:nowrap; }
+.ch-arrow{ flex:none; color:var(--text-muted); font-weight:800; font-size:1.2rem; }
+
+/* ---------- lesson pages ---------- */
+.lesson-card{
+  background:var(--surface); border-radius:20px; padding:18px; box-shadow:var(--card-shadow);
+  border:1px solid var(--surface-2); display:flex; flex-direction:column; gap:10px;
+}
+.lesson-card h3{ font-family:var(--font-display); font-size:1.02rem; margin:0; }
+.lesson-hero{ align-items:center; text-align:center; }
+.lesson-hero .lh-ic{ font-size:2.6rem; line-height:1; }
+.lh-intro{ font-size:.92rem; font-weight:700; color:var(--text-muted); line-height:1.5; margin:0; }
+.sutra-pill{ display:inline-block; background:var(--surface-2); color:var(--accent); font-weight:800; font-size:.72rem; padding:6px 12px; border-radius:14px; line-height:1.35; }
+.trick-steps{ margin:0; padding-left:1.25rem; display:flex; flex-direction:column; gap:8px; font-weight:700; font-size:.9rem; line-height:1.5; }
+.lesson-tip{ margin:0; background:var(--success-bg); color:var(--success); font-weight:800; font-size:.85rem; line-height:1.45; border-radius:12px; padding:10px 12px; }
+.lesson-p{ margin:0; font-size:.88rem; font-weight:700; line-height:1.5; }
+.lesson-hint{ margin:0; font-size:.82rem; font-weight:700; color:var(--text-muted); text-align:center; }
+.lesson-note{ margin:0; font-size:.76rem; font-weight:700; color:var(--text-muted); text-align:center; line-height:1.45; }
+#lessonBody{ display:flex; flex-direction:column; gap:14px; }
+
+.ex-box{ display:flex; flex-direction:column; gap:8px; padding:10px 0; border-top:1px dashed var(--surface-2); align-items:flex-start; }
+.ex-box:first-of-type{ border-top:none; }
+.ex-q{ font-family:var(--font-display); font-size:1.3rem; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; }
+.ex-steps{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; width:100%; }
+.ex-steps li{ background:var(--surface-2); border-radius:10px; padding:8px 10px; font-weight:700; font-size:.86rem; line-height:1.45; }
+.ex-steps li[hidden]{ display:none; }
+.ex-steps li.is-final{ background:var(--success-bg); color:var(--success); font-weight:800; }
+
+.try-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:10px 0; border-top:1px dashed var(--surface-2); }
+.try-row:first-child{ border-top:none; }
+.try-q{ flex:1 1 100%; font-family:var(--font-display); font-weight:800; font-size:1.1rem; font-variant-numeric:tabular-nums; }
+.num-input.try-input{ font-size:1.15rem; width:8ch; padding:7px 6px; }
+.try-fb{ flex:1 1 100%; font-size:.8rem; font-weight:800; line-height:1.4; color:var(--text-muted); }
+.try-fb:empty{ display:none; }
+.try-fb.ok{ color:var(--success); }
+.try-fb.bad{ color:var(--error); }
+.try-summary{ margin:0; text-align:center; font-weight:800; font-size:.9rem; color:var(--accent); }
+
+/* ---------- phonics lesson cards ---------- */
+.ph-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+.ph-card{
+  background:var(--surface); border:1px solid var(--surface-2); border-radius:18px; padding:12px;
+  box-shadow:var(--card-shadow); display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.ph-sound{
+  font-family:var(--font-display); font-weight:800; font-size:2.3rem; line-height:1.1; color:var(--accent);
+  background:var(--surface-2); border:none; border-radius:14px; min-width:84px; padding:6px 16px; cursor:pointer;
+}
+.ph-sound:active{ transform:translateY(1px); }
+.ph-words{ display:flex; flex-direction:column; gap:6px; width:100%; }
+.ph-word{
+  display:flex; align-items:center; gap:8px; background:var(--surface-2); border:none; border-radius:10px;
+  padding:6px 10px; font-weight:800; font-size:.92rem; color:var(--text); cursor:pointer; text-align:left; font-family:var(--font-body);
+}
+.ph-word .pe, .ph-result .pe{ font-size:1.4rem; line-height:1; }
+.ph-word b, .ph-result b{ color:var(--accent); }
+.ph-blend{
+  display:flex; flex-direction:column; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--surface-2);
+  border-radius:18px; padding:12px; box-shadow:var(--card-shadow); cursor:pointer; color:var(--text); font-family:var(--font-body);
+}
+.ph-blend:active{ transform:translateY(1px); }
+.ph-parts{ display:flex; gap:6px; }
+.ph-parts span{
+  min-width:34px; padding:4px 8px; text-align:center; font-family:var(--font-display); font-weight:800; font-size:1.5rem;
+  color:var(--accent); background:var(--surface-2); border-radius:10px;
+}
+.ph-result{ font-weight:800; font-size:.95rem; }
+
+/* ---------- phonics practice ---------- */
+.pq-prompt{ margin:0; font-family:var(--font-display); font-weight:800; font-size:1.05rem; text-align:center; line-height:1.35; }
+.pq-stage{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:92px; width:100%; }
+.pq-big{ font-family:var(--font-display); font-weight:800; font-size:clamp(2.8rem,15vw,4.4rem); color:var(--accent); line-height:1.1; letter-spacing:.03em; text-align:center; }
+.pq-emoji{ font-size:clamp(3rem,15vw,4.2rem); line-height:1; }
+.pq-label{ font-weight:800; font-size:1.05rem; color:var(--text-muted); }
+.pq-choices{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; width:100%; }
+.pq-choices.is-three{ grid-template-columns:repeat(3,1fr); }
+.pq-choice{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+  background:var(--surface-2); border:2px solid transparent; border-radius:16px; padding:12px 6px; min-height:84px;
+  cursor:pointer; font-family:var(--font-display); font-weight:800; color:var(--text);
+}
+.pq-choice:active{ transform:translateY(1px); }
+.pq-ce{ font-size:2.1rem; line-height:1; }
+.pq-cl{ font-size:.8rem; font-weight:800; color:var(--text-muted); }
+.pq-ct{ font-size:1.6rem; line-height:1.15; }
+.pq-choices.is-three .pq-ct{ font-size:1.25rem; }
+.pq-choice.is-correct{ background:var(--success-bg); border-color:var(--success); color:var(--success); }
+.pq-choice.is-correct .pq-cl{ color:var(--success); }
+.pq-choice.is-wrong{ background:var(--error-bg); border-color:var(--error); color:var(--error); }
+.pq-choice:disabled{ cursor:default; }
+.pq-choice:disabled:not(.is-correct):not(.is-wrong){ opacity:.55; }
+
+/* ================= Version 30: lime / emerald / charcoal palette ================= */
+body{ background-color:var(--bg); background-image:var(--bg-grad); background-repeat:no-repeat; background-attachment:fixed; }
+body::before{
+  content:''; display:block; height:8px;
+  background:linear-gradient(90deg,var(--p-lime) 0 25%,var(--p-lg) 25% 50%,var(--p-em) 50% 75%,var(--stripe-4) 75% 100%);
+}
+.titles h1{ color:var(--text); }
+.header-quote{ color:var(--accent); }
+.setup-card, .lesson-card, .session-card, .ai-lesson-card{ border-radius:22px; border:1.5px solid var(--rodline); }
+.list-item{ border-radius:16px; border:1.5px solid var(--rodline); }
+
+/* chunky, pressable buttons: emerald fill, charcoal text and edge */
+.btn{ border-radius:16px; }
+.btn-primary{ background:var(--btn); color:var(--btn-ink); border:2px solid var(--btn-edge); box-shadow:0 4px 0 var(--btn-edge); }
+.btn-primary:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--btn-edge); }
+.btn-outline{ border-width:2.5px; }
+.btn-ghost{ border:2px solid var(--rodline); }
+.icon-btn{ background:var(--surface); border:2px solid var(--rodline); }
+
+/* selected tabs: lime fill, charcoal text, outlined */
+.practice-tab[aria-pressed="true"], .ai-subtab[aria-pressed="true"]{
+  background:var(--sel); color:var(--sel-ink); box-shadow:inset 0 0 0 2px var(--sel-edge), 0 3px 0 var(--sel-edge);
+}
+.skill-tab{ background:var(--surface); border-color:var(--rodline); }
+.skill-tab[aria-pressed="true"]{ background:var(--sel); border-color:var(--sel-edge); color:var(--sel-ink); }
+.nav-btn[aria-pressed="true"]{ background:var(--sel); color:var(--sel-ink); box-shadow:inset 0 0 0 2px var(--sel-edge); }
+.bottom-nav{ border-top:3px solid var(--line-strong); }
+
+/* category tabs: Abacus lime, Vedic Maths light green, Phonics emerald */
+.cat-tab{ border:2px solid var(--rodline); border-radius:18px; }
+.cat-tab[data-cat="abacus"]{ --tc:var(--p-lime); }
+.cat-tab[data-cat="vedic"]{ --tc:var(--p-lg); }
+.cat-tab[data-cat="phonics"]{ --tc:var(--p-em); }
+.cat-tab .cat-ic{ font-size:1.5rem; }
+.cat-tab[aria-pressed="true"]{ background:var(--tc); color:#1B1B1B; border-color:var(--sel-edge); box-shadow:0 4px 0 var(--sel-edge); transform:translateY(-1px); }
+
+/* chapter numbers cycle through the three greens */
+.ch-num{ color:#1B1B1B; width:32px; height:32px; border:2px solid #1B1B1B; }
+.ch-list .ch-card:nth-child(3n+1) .ch-num{ background:var(--p-lime); }
+.ch-list .ch-card:nth-child(3n+2) .ch-num{ background:var(--p-lg); }
+.ch-list .ch-card:nth-child(3n+3) .ch-num{ background:var(--p-em); }
+.ch-card{ border:2px solid var(--rodline); border-radius:18px; }
+
+/* lesson heroes take their category colour */
+#view-lesson[data-kind="vedic"] .lesson-hero{ background:linear-gradient(180deg,rgba(166,255,77,.38),var(--surface) 85%); }
+#view-lesson[data-kind="phonics"] .lesson-hero{ background:linear-gradient(180deg,rgba(0,208,132,.28),var(--surface) 85%); }
+.sutra-pill{ background:var(--surface); border:2px solid var(--p-em); }
+
+/* phonics practice */
+.pq-choice{ background:var(--surface); border-color:var(--rodline); box-shadow:0 3px 0 var(--rodline); }
+.pq-choice.is-correct{ border-color:var(--success); box-shadow:0 3px 0 var(--success); }
+.pq-choice.is-wrong{ border-color:var(--error); box-shadow:0 3px 0 var(--error); }
+.pq-stage{ background:var(--surface-2); border-radius:20px; padding:10px; }
+.ph-sound{ background:var(--surface-2); box-shadow:0 3px 0 var(--rodline); }
+
+/* progress + statistics bars */
+.assign-progress-track{ background:var(--track); }
+.assign-progress-fill{ background:linear-gradient(90deg,var(--p-lime),var(--p-em)); }
+.bar-track{ height:12px; background:var(--track); }
+.bar-fill{ background:var(--p-em); box-shadow:inset 0 0 0 1.5px var(--bar-edge); }
+.bar-row:nth-child(3n+1) .bar-fill{ background:var(--p-em); }
+.bar-row:nth-child(3n+2) .bar-fill{ background:var(--p-lg); }
+.bar-row:nth-child(3n+3) .bar-fill{ background:var(--p-lime); }
+
+.lock-banner{ background:var(--surface); border:2px dashed var(--accent); }
+.install-tip{ background:var(--surface); }
+/* chapter picker gets the full row so "Mixed — all chapters" is not cut off */
+.cat-pane .config-form .field:first-child{ grid-column:1 / -1; }
+
 </style>
 </head>
 <body>
@@ -497,7 +743,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   <div class="login-modal" id="loginModal" hidden>
     <div class="login-panel">
       <h2>Member Log In</h2>
-      <p class="login-sub">Enter your Little Star Kid Academy member details to unlock every digit level on all skills.</p>
+      <p class="login-sub">Enter your Little Star Kid Academy member details to unlock every digit level on all skills, plus 10, 15 and 20-question rounds in Vedic Maths and Phonics.</p>
       <div class="field">
         <label for="loginUsername">Username</label>
         <input type="text" id="loginUsername" autocomplete="username" autocapitalize="none" spellcheck="false">
@@ -520,6 +766,13 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
     <!-- ===================== SETUP VIEW ===================== -->
     <section class="view" id="view-setup">
+      <div class="cat-tabs" id="catTabs" role="tablist" aria-label="Category">
+        <button class="cat-tab" data-cat="abacus" role="tab" aria-pressed="true"><span class="cat-ic">🧮</span>Abacus</button>
+        <button class="cat-tab" data-cat="vedic" role="tab" aria-pressed="false"><span class="cat-ic">✨</span>Vedic Maths</button>
+        <button class="cat-tab" data-cat="phonics" role="tab" aria-pressed="false"><span class="cat-ic">🔤</span>Phonics</button>
+      </div>
+
+      <div class="cat-panel" id="abacusPanel">
       <div class="lock-banner" id="lockBanner">
         <span class="lock-banner-text">🔒 Free practice is single-digit only. Log in to unlock 2–4 digit levels on every skill.</span>
         <button type="button" class="btn btn-primary btn-sm" id="lockBannerLogin">Log in</button>
@@ -536,6 +789,87 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
         <div class="setup-actions">
           <button class="btn btn-primary btn-block" id="btnStart" type="button">Start Practice</button>
           <button class="btn btn-outline btn-block" id="btnHistory" type="button">View Performance History</button>
+        </div>
+      </div>
+      </div><!-- /abacusPanel -->
+
+      <!-- ===== VEDIC MATHS ===== -->
+      <div class="cat-panel" id="vedicPanel" hidden>
+        <div class="cat-intro">
+          <h2>✨ Vedic Maths</h2>
+          <p>Fast mental-math tricks from ancient India. Learn a trick chapter by chapter, then practice it!</p>
+        </div>
+        <div class="ai-subtabs" id="vedicSubTabs" role="tablist" aria-label="Vedic Maths section">
+          <button type="button" class="ai-subtab" data-sub="learn" role="tab" aria-pressed="true">📖 Learn Tricks</button>
+          <button type="button" class="ai-subtab" data-sub="practice" role="tab" aria-pressed="false">✏️ Practice</button>
+        </div>
+        <div class="cat-pane" id="vedicLearnPane">
+          <div class="ch-list" id="vedicChapterList"></div>
+        </div>
+        <div class="cat-pane" id="vedicPracticePane" hidden>
+          <div class="setup-card">
+            <div class="config-form">
+              <div class="field">
+                <label for="vedicChapterSel">Chapter</label>
+                <select id="vedicChapterSel"></select>
+              </div>
+              <div class="field">
+                <label for="vedicCountSel">No of Questions</label>
+                <select id="vedicCountSel">
+                  <option value="5" selected>5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+            </div>
+            <div class="lock-banner" id="vedicLockBanner">
+              <span class="lock-banner-text">🔒 Free practice is 5 questions. Log in to unlock 10, 15 and 20.</span>
+              <button type="button" class="btn btn-primary btn-sm" id="vedicLockLogin">Log in</button>
+            </div>
+            <p class="assign-hint" id="vedicPracticeHint"></p>
+            <button class="btn btn-primary btn-block" id="btnVedicStart" type="button">Start Practice</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PHONICS ===== -->
+      <div class="cat-panel" id="phonicsPanel" hidden>
+        <div class="cat-intro">
+          <h2>🔤 Phonics</h2>
+          <p>Learn the sounds letters make, chapter by chapter, then practice reading and spelling them!</p>
+        </div>
+        <div class="ai-subtabs" id="phonicsSubTabs" role="tablist" aria-label="Phonics section">
+          <button type="button" class="ai-subtab" data-sub="learn" role="tab" aria-pressed="true">📖 Learn Sounds</button>
+          <button type="button" class="ai-subtab" data-sub="practice" role="tab" aria-pressed="false">✏️ Practice</button>
+        </div>
+        <div class="cat-pane" id="phonicsLearnPane">
+          <div class="ch-list" id="phonicsChapterList"></div>
+        </div>
+        <div class="cat-pane" id="phonicsPracticePane" hidden>
+          <div class="setup-card">
+            <div class="config-form">
+              <div class="field">
+                <label for="phonicsChapterSel">Chapter</label>
+                <select id="phonicsChapterSel"></select>
+              </div>
+              <div class="field">
+                <label for="phonicsCountSel">No of Questions</label>
+                <select id="phonicsCountSel">
+                  <option value="5" selected>5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+            </div>
+            <div class="lock-banner" id="phonicsLockBanner">
+              <span class="lock-banner-text">🔒 Free practice is 5 questions. Log in to unlock 10, 15 and 20.</span>
+              <button type="button" class="btn btn-primary btn-sm" id="phonicsLockLogin">Log in</button>
+            </div>
+            <p class="assign-hint" id="phonicsPracticeHint"></p>
+            <button class="btn btn-primary btn-block" id="btnPhonicsStart" type="button">Start Practice</button>
+          </div>
         </div>
       </div>
 
@@ -749,6 +1083,33 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
       </div>
     </section>
 
+    <!-- ===================== LESSON VIEW (Vedic Maths + Phonics chapters) ===================== -->
+    <section class="view" id="view-lesson" hidden>
+      <div class="view-header">
+        <button class="back-btn" id="btnLessonBack" type="button">‹ Back</button>
+        <h2 id="lessonHeading">Chapter</h2>
+      </div>
+      <div id="lessonBody"></div>
+    </section>
+
+    <!-- ===================== PHONICS PRACTICE VIEW ===================== -->
+    <section class="view" id="view-phonicsquiz" hidden>
+      <div class="session-card">
+        <div class="session-meta">
+          <span id="pqMeta"></span>
+          <span class="session-score">Score <b id="pqScore">0</b>/<b id="pqAttempted">0</b></span>
+        </div>
+        <div class="assign-progress-track"><div class="assign-progress-fill" id="pqProgressFill"></div></div>
+        <p class="session-status" id="pqStatus"></p>
+        <p class="pq-prompt" id="pqPrompt"></p>
+        <div class="pq-stage" id="pqStage"></div>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnPqSpeak">🔊 Hear it</button>
+        <div class="pq-choices" id="pqChoices"></div>
+        <div class="feedback" id="pqFeedback" aria-live="polite"></div>
+        <button class="back-btn" id="btnPqQuit" type="button">Quit practice</button>
+      </div>
+    </section>
+
   </main>
 
   <div class="footer-row">
@@ -820,7 +1181,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   function burst(anchorEl){
     if (reduceMotion || !anchorEl) return;
-    var colors = ['var(--accent)', 'var(--heaven-1)', 'var(--earth-1)'];
+    var colors = ['var(--p-lime)', 'var(--p-lg)', 'var(--p-em)', 'var(--p-lime)', 'var(--p-lg)', 'var(--p-em)'];
     var rect = anchorEl.getBoundingClientRect();
     var cx = rect.left + rect.width / 2;
     var cy = rect.top + 30;
@@ -1176,7 +1537,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     ctx.lineWidth = 32;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    var strokeColor = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#241129';
+    var strokeColor = '#1B1B1B';
     ctx.strokeStyle = strokeColor;
     ctx.fillStyle = strokeColor;
     var drawing = false, lastX = 0, lastY = 0;
@@ -1407,7 +1768,12 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     aiLessonIdx: 0,
     aiQuizIdx: 0,
     aiQuizScore: 0,
-    aiQuizAnswered: false
+    aiQuizAnswered: false,
+    category: 'abacus',
+    vedicSub: 'learn',
+    phonicsSub: 'learn',
+    vedicPracticeCh: 'mixed',
+    phonicsPracticeCh: 'mixed'
   };
 
   function loadPremiumStatus(){
@@ -1427,7 +1793,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
 
   /* ================= view switching ================= */
 
-  var ALL_VIEWS = ['setup', 'session', 'summary', 'history', 'highscores', 'stats', 'assign', 'assignresult', 'installhelp', 'ai'];
+  var ALL_VIEWS = ['setup', 'session', 'summary', 'history', 'highscores', 'stats', 'assign', 'assignresult', 'installhelp', 'ai', 'lesson', 'phonicsquiz'];
   var NAV_VIEWS = { setup: true, highscores: true, stats: true, assign: true, ai: true };
 
   function showView(id){
@@ -1443,6 +1809,11 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     if (id === 'stats') renderStats();
     if (id === 'history') renderHistory();
     if (id === 'ai') renderAiLesson();
+    if (id === 'setup'){
+      if (state.category === 'vedic') renderCatPanel('vedic');
+      else if (state.category === 'phonics') renderCatPanel('phonics');
+    }
+    if (id !== 'lesson' && id !== 'phonicsquiz') stopSpeaking();
   }
 
   /* ================= setup view wiring ================= */
@@ -1476,6 +1847,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     if (els.menuLogin) els.menuLogin.hidden = !!state.premium;
     if (els.menuLogout) els.menuLogout.hidden = !state.premium;
     refreshSetupForm();
+    if (els.vedicCountSel){ refreshCatLocks('vedic'); refreshCatLocks('phonics'); }
   }
 
   function setPracticeType(kind){
@@ -1656,6 +2028,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     if (session.type === 'timed') checkTimedAnswer();
     else if (session.type === 'oral') checkOralAnswer();
     else if (session.type === 'assign') checkAssignAnswer();
+    else if (session.type === 'vedic') checkVedicAnswer();
   }
 
   function quitSession(){
@@ -1696,6 +2069,1193 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.summaryDetail.textContent = SKILL_LABEL[record.skill] + ' · ' + record.cfgSummary;
     state._lastRecord = record;
   }
+
+  /* ================= VEDIC MATHS: chapters, tricks and generators ================= */
+  /* VEDIC-BEGIN (needs randIntWith + formatNumber from the app scope) */
+
+  function vdPick(rng, arr){ return arr[Math.floor(rng() * arr.length)]; }
+  function vdPad2(n){ return n < 10 ? '0' + n : String(n); }
+  function vdDigitRoot(n){ return n === 0 ? 0 : ((n - 1) % 9) + 1; }
+
+  var VEDIC_CHAPTERS = [
+
+    /* ---- 1. near round numbers ---- */
+    {
+      id: 'round', icon: '🎯', title: 'Add & Subtract Near Round Numbers',
+      short: 'Adding 99? Add 100, then take 1 back!',
+      sutra: null,
+      intro: 'Numbers like 99, 98 or 101 are very close to a round number. Round numbers are easy to add and subtract, so we use the round number first and then fix the small difference.',
+      steps: [
+        'Spot the number that is close to a round number (99 is close to 100).',
+        'Add or subtract the round number first. This is the easy part!',
+        'Fix the small difference: if you used a number that was too big, take the extra back. If it was too small, add the rest.'
+      ],
+      tip: 'Adding 99 is the same as adding 100 and then taking 1 away.',
+      examples: [
+        { a: 476, r: 100, d: 1, dir: 'below', op: '+' },
+        { a: 735, r: 200, d: 2, dir: 'below', op: '−' },
+        { a: 358, r: 100, d: 2, dir: 'above', op: '+' }
+      ],
+      rand: function(rng){
+        var r = vdPick(rng, [100, 200, 300, 500, 1000]);
+        var d = vdPick(rng, [1, 2, 3]);
+        var dir = rng() < 0.6 ? 'below' : 'above';
+        var op = rng() < 0.5 ? '+' : '−';
+        var m = dir === 'below' ? r - d : r + d;
+        var a = op === '+' ? randIntWith(rng, 120, 899) : randIntWith(rng, m + 30, m + 600);
+        return { a: a, r: r, d: d, dir: dir, op: op };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var m = p.dir === 'below' ? p.r - p.d : p.r + p.d;
+        var base = p.op === '+' ? p.a + p.r : p.a - p.r;
+        var fixSign, fixText;
+        if (p.op === '+' && p.dir === 'below'){ fixSign = '−'; fixText = N(m) + ' is ' + p.d + ' less than ' + N(p.r) + ', so take ' + p.d + ' back'; }
+        else if (p.op === '+' && p.dir === 'above'){ fixSign = '+'; fixText = N(m) + ' is ' + p.d + ' more than ' + N(p.r) + ', so add ' + p.d + ' more'; }
+        else if (p.op === '−' && p.dir === 'below'){ fixSign = '+'; fixText = 'we took away ' + p.d + ' too much, so give ' + p.d + ' back'; }
+        else { fixSign = '−'; fixText = 'we must take away ' + p.d + ' more'; }
+        var ans = fixSign === '+' ? base + p.d : base - p.d;
+        return {
+          prompt: N(p.a) + ' ' + p.op + ' ' + N(m),
+          answer: ans, decimals: 0,
+          steps: [
+            N(m) + ' is close to ' + N(p.r) + '. First do ' + N(p.a) + ' ' + p.op + ' ' + N(p.r) + ' = ' + N(base) + '.',
+            'Now fix it: ' + fixText + '. ' + N(base) + ' ' + fixSign + ' ' + p.d + ' = ' + N(ans) + '.'
+          ],
+          hint: N(p.a) + ' ' + p.op + ' ' + N(p.r) + ' = ' + N(base) + ', then ' + fixSign + ' ' + p.d + ' = ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 2. multiply by 5 / 50 ---- */
+    {
+      id: 'times5', icon: '🖐️', title: 'Multiply by 5 and 50',
+      short: 'Take half, then multiply by 10!',
+      sutra: null,
+      intro: '5 is exactly half of 10. So multiplying by 5 is the same as taking half of the number and then multiplying by 10. Super quick!',
+      steps: [
+        'Take half of the number.',
+        'Multiply that by 10: add a zero at the end. (If your half has a “.5”, just slide the point one place to the right.)',
+        'For × 50, take half and then multiply by 100: add two zeros.'
+      ],
+      tip: '× 5 means half × 10.  × 50 means half × 100.',
+      examples: [ { n: 36, m: 5 }, { n: 47, m: 5 }, { n: 64, m: 50 } ],
+      rand: function(rng){
+        return { n: randIntWith(rng, 12, 98), m: rng() < 0.6 ? 5 : 50 };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var half = p.n / 2;
+        var pw = p.m === 5 ? 10 : 100;
+        var ans = half * pw;
+        return {
+          prompt: N(p.n) + ' × ' + p.m,
+          answer: ans, decimals: 0,
+          steps: [
+            'Half of ' + N(p.n) + ' is ' + N(half) + '.',
+            (pw === 10 ? 'Multiply by 10' : 'Multiply by 100 (two zeros)') + ': ' + N(half) + ' × ' + pw + ' = ' + N(ans) + '.'
+          ],
+          hint: 'half of ' + N(p.n) + ' = ' + N(half) + ', × ' + pw + ' = ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 3. multiply by 25 ---- */
+    {
+      id: 'times25', icon: '🪙', title: 'Multiply by 25',
+      short: 'Halve twice, then multiply by 100!',
+      sutra: null,
+      intro: '25 is a quarter of 100 (just like 25 paise is a quarter of a rupee). So × 25 means “divide by 4, then multiply by 100”.',
+      steps: [
+        'Take half of the number.',
+        'Take half again. (Halving twice is the same as dividing by 4.)',
+        'Multiply by 100: add two zeros, or slide the point two places to the right.'
+      ],
+      tip: 'Think of 25 as ¼ of 100: divide by 4, then × 100.',
+      examples: [ { n: 48 }, { n: 36 }, { n: 34 } ],
+      rand: function(rng){ return { n: randIntWith(rng, 12, 96) }; },
+      solve: function(p){
+        var N = formatNumber;
+        var h1 = p.n / 2, h2 = p.n / 4;
+        var ans = h2 * 100;
+        return {
+          prompt: N(p.n) + ' × 25',
+          answer: ans, decimals: 0,
+          steps: [
+            'Half of ' + N(p.n) + ' is ' + N(h1) + '.',
+            'Half of ' + N(h1) + ' is ' + N(h2) + '.',
+            'Multiply by 100: ' + N(h2) + ' × 100 = ' + N(ans) + '.'
+          ],
+          hint: N(p.n) + ' ÷ 4 = ' + N(h2) + ', × 100 = ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 4. multiply by 11 ---- */
+    {
+      id: 'times11', icon: '🔟', title: 'Multiply by 11',
+      short: 'Add the two digits and put the total in the middle!',
+      sutra: null,
+      intro: 'Here is a magic trick for any 2-digit number × 11. You only need to add the two digits together!',
+      steps: [
+        'Write the first digit and the last digit of the number with a gap between them.',
+        'Add the two digits together and put the total in the gap.',
+        'If the total is 10 or more, write only the units digit in the gap and carry the 1 to the first digit.'
+      ],
+      tip: '2 | 2+3 | 3  →  23 × 11 = 253',
+      examples: [ { n: 23 }, { n: 45 }, { n: 78 } ],
+      rand: function(rng){ return { n: randIntWith(rng, 12, 99) }; },
+      solve: function(p){
+        var N = formatNumber;
+        var a = Math.floor(p.n / 10), b = p.n % 10, s = a + b;
+        var ans, lines;
+        if (s < 10){
+          ans = a * 100 + s * 10 + b;
+          lines = [
+            'First digit is ' + a + ' and last digit is ' + b + '.',
+            'Add them: ' + a + ' + ' + b + ' = ' + s + '. Put ' + s + ' in the middle.',
+            a + ' | ' + s + ' | ' + b + '  →  ' + N(ans) + '.'
+          ];
+        } else {
+          ans = (a + 1) * 100 + (s - 10) * 10 + b;
+          lines = [
+            'First digit is ' + a + ' and last digit is ' + b + '.',
+            'Add them: ' + a + ' + ' + b + ' = ' + s + '. That is two digits, so write ' + (s - 10) + ' and carry 1.',
+            'The first digit becomes ' + a + ' + 1 = ' + (a + 1) + '.',
+            (a + 1) + ' | ' + (s - 10) + ' | ' + b + '  →  ' + N(ans) + '.'
+          ];
+        }
+        return {
+          prompt: N(p.n) + ' × 11', answer: ans, decimals: 0, steps: lines,
+          hint: a + ' | ' + a + '+' + b + '=' + s + ' | ' + b + (s >= 10 ? ' (carry 1)' : '') + '  →  ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 5. multiply by 9 / 99 ---- */
+    {
+      id: 'times9', icon: '9️⃣', title: 'Multiply by 9 and 99',
+      short: '9 is 10 − 1, so multiply by 10 and take one away!',
+      sutra: null,
+      intro: '9 is just 10 minus 1, and 99 is just 100 minus 1. Multiplying by 10 or 100 is easy, so we do that first and then take away one copy of the number.',
+      steps: [
+        'For × 9: multiply the number by 10 (add a zero).',
+        'For × 99: multiply the number by 100 (add two zeros).',
+        'Now subtract the number once. That is your answer!'
+      ],
+      tip: 'n × 9 = n × 10 − n.   n × 99 = n × 100 − n.',
+      examples: [ { n: 34, m: 9 }, { n: 56, m: 9 }, { n: 47, m: 99 } ],
+      rand: function(rng){
+        return { n: randIntWith(rng, 12, 99), m: rng() < 0.55 ? 9 : 99 };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var pw = p.m === 9 ? 10 : 100;
+        var big = p.n * pw;
+        var ans = big - p.n;
+        return {
+          prompt: N(p.n) + ' × ' + p.m,
+          answer: ans, decimals: 0,
+          steps: [
+            p.m + ' is ' + pw + ' − 1, so first do ' + N(p.n) + ' × ' + pw + ' = ' + N(big) + '.',
+            'Now take away one ' + N(p.n) + ': ' + N(big) + ' − ' + N(p.n) + ' = ' + N(ans) + '.'
+          ],
+          hint: N(p.n) + ' × ' + pw + ' = ' + N(big) + ', − ' + N(p.n) + ' = ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 6. all from 9, last from 10 ---- */
+    {
+      id: 'from9', icon: '🔻', title: 'All from 9, Last from 10',
+      short: 'Subtract from 100, 1000, 10000 with no borrowing!',
+      sutra: { name: 'Nikhilam Navatashcaramam Dashatah', meaning: '“All from 9 and the last from 10”' },
+      intro: 'Subtracting from 100, 1000 or 10000 can be tricky because of borrowing. This Vedic sutra lets you write the answer directly, digit by digit, from left to right.',
+      steps: [
+        'Look at the number you are subtracting, digit by digit.',
+        'Subtract every digit from 9 — except the very last digit.',
+        'Subtract the last digit from 10.',
+        'Write all the new digits side by side. That is the answer!'
+      ],
+      tip: '1000 − 357:  9−3=6, 9−5=4, 10−7=3  →  643',
+      examples: [ { k: 3, n: 357 }, { k: 2, n: 46 }, { k: 4, n: 2748 } ],
+      rand: function(rng){
+        var k = vdPick(rng, [2, 3, 3, 4]);
+        var lo = Math.pow(10, k - 1), hi = Math.pow(10, k) - 1;
+        var n = randIntWith(rng, lo, hi);
+        if (n % 10 === 0) n += randIntWith(rng, 1, 9);
+        return { k: k, n: n };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var base = Math.pow(10, p.k);
+        var ans = base - p.n;
+        var ds = String(p.n).split('').map(Number);
+        var comp = ds.map(function(d, i){ return i < ds.length - 1 ? 9 - d : 10 - d; });
+        var from9 = comp.slice(0, -1).map(function(c, i){ return '9 − ' + ds[i] + ' = ' + c; }).join(',  ');
+        var last = ds.length - 1;
+        return {
+          prompt: N(base) + ' − ' + N(p.n),
+          answer: ans, decimals: 0,
+          steps: [
+            'All digits except the last come from 9:  ' + from9 + '.',
+            'The last digit comes from 10:  10 − ' + ds[last] + ' = ' + comp[last] + '.',
+            'Write them side by side: ' + comp.join(' | ') + '  →  ' + N(ans) + '.'
+          ],
+          hint: 'from 9: ' + comp.slice(0, -1).join(', ') + '; last from 10: ' + comp[last] + '  →  ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 7. squares ending in 5 ---- */
+    {
+      id: 'sq5', icon: '⬛', title: 'Squares of Numbers Ending in 5',
+      short: 'Multiply by the next number, then write 25!',
+      sutra: { name: 'Ekadhikena Purvena', meaning: '“By one more than the previous one”' },
+      intro: 'Squaring a number that ends in 5 is the easiest square trick of all. The answer always ends in 25!',
+      steps: [
+        'Cover the 5 at the end. Look at the number that is left (for 35 it is 3).',
+        'Multiply it by the next number (3 × 4).',
+        'Write 25 after that answer.'
+      ],
+      tip: '35² → 3 × 4 = 12 → 1225',
+      examples: [ { k: 3 }, { k: 7 }, { k: 12 } ],
+      rand: function(rng){ return { k: randIntWith(rng, 1, 12) }; },
+      solve: function(p){
+        var N = formatNumber;
+        var n = p.k * 10 + 5;
+        var front = p.k * (p.k + 1);
+        var ans = front * 100 + 25;
+        return {
+          prompt: N(n) + '²',
+          answer: ans, decimals: 0,
+          steps: [
+            'The number before the 5 is ' + p.k + '. One more than that is ' + (p.k + 1) + '.',
+            'Multiply: ' + p.k + ' × ' + (p.k + 1) + ' = ' + N(front) + '.',
+            'Always finish with 25:  ' + N(front) + ' | 25  →  ' + N(ans) + '.'
+          ],
+          hint: p.k + ' × ' + (p.k + 1) + ' = ' + front + ', then 25  →  ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 8. same tens, units add to 10 ---- */
+    {
+      id: 'tens5', icon: '🔗', title: 'Same Tens, Units Add to 10',
+      short: 'Like 43 × 47: tens × next tens, then units × units!',
+      sutra: { name: 'Antyayor Dashake’pi', meaning: '“Last digits add up to ten”' },
+      intro: 'When two numbers have the same tens digit and their units digits add up to 10 (like 43 and 47, since 3 + 7 = 10), there is a very fast way to multiply them.',
+      steps: [
+        'Check: same tens digit, and the units add up to 10.',
+        'Front part: multiply the tens digit by one more than itself.',
+        'Back part: multiply the two units digits. Write it as 2 digits (09 not 9).',
+        'Join the front part and the back part.'
+      ],
+      tip: '43 × 47 → (4 × 5) | (3 × 7) = 20 | 21 = 2021',
+      examples: [ { t: 4, u: 3, swap: false }, { t: 6, u: 8, swap: false }, { t: 2, u: 9, swap: true } ],
+      rand: function(rng){
+        return { t: randIntWith(rng, 1, 9), u: randIntWith(rng, 1, 9), swap: rng() < 0.5 };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var n1 = p.t * 10 + p.u, n2 = p.t * 10 + (10 - p.u);
+        var front = p.t * (p.t + 1), back = p.u * (10 - p.u);
+        var ans = front * 100 + back;
+        return {
+          prompt: p.swap ? N(n2) + ' × ' + N(n1) : N(n1) + ' × ' + N(n2),
+          answer: ans, decimals: 0,
+          steps: [
+            'Same tens digit (' + p.t + ') and units ' + p.u + ' + ' + (10 - p.u) + ' = 10. The trick works!',
+            'Front part: ' + p.t + ' × ' + (p.t + 1) + ' = ' + front + '.',
+            'Back part: ' + p.u + ' × ' + (10 - p.u) + ' = ' + back + (back < 10 ? ' (write it as ' + vdPad2(back) + ')' : '') + '.',
+            'Join them: ' + front + ' | ' + vdPad2(back) + '  →  ' + N(ans) + '.'
+          ],
+          hint: front + ' | ' + vdPad2(back) + '  →  ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 9. numbers close to 100 ---- */
+    {
+      id: 'near100', icon: '💯', title: 'Multiply Numbers Close to 100',
+      short: 'Use how far each number is from 100!',
+      sutra: { name: 'Nikhilam Navatashcaramam Dashatah', meaning: '“All from 9 and the last from 10”' },
+      intro: 'Numbers just below 100 (like 97 and 94) or just above 100 (like 103 and 107) can be multiplied by looking at how far each one is from 100.',
+      steps: [
+        'Find how far each number is from 100 (97 is 3 below, 94 is 6 below).',
+        'Front part: take one number and subtract the OTHER number’s gap (97 − 6 = 91). For numbers above 100, add the other gap instead.',
+        'Back part: multiply the two gaps (3 × 6 = 18). Write it as 2 digits.',
+        'Join the front and back parts: 91 | 18 = 9118.'
+      ],
+      tip: '97 × 94 → 97 − 6 = 91, and 3 × 6 = 18 → 9118',
+      examples: [ { mode: 'below', a: 97, b: 94 }, { mode: 'below', a: 98, b: 96 }, { mode: 'above', a: 103, b: 107 } ],
+      rand: function(rng){
+        var below = rng() < 0.6;
+        var lo = below ? 91 : 101, hi = below ? 99 : 109;
+        return { mode: below ? 'below' : 'above', a: randIntWith(rng, lo, hi), b: randIntWith(rng, lo, hi) };
+      },
+      solve: function(p){
+        var N = formatNumber;
+        var below = p.mode === 'below';
+        var ga = below ? 100 - p.a : p.a - 100;
+        var gb = below ? 100 - p.b : p.b - 100;
+        var front = below ? p.a - gb : p.a + gb;
+        var back = ga * gb;
+        var ans = front * 100 + back;
+        var word = below ? 'below' : 'above';
+        return {
+          prompt: N(p.a) + ' × ' + N(p.b),
+          answer: ans, decimals: 0,
+          steps: [
+            p.a + ' is ' + ga + ' ' + word + ' 100, and ' + p.b + ' is ' + gb + ' ' + word + ' 100.',
+            'Front part: ' + p.a + (below ? ' − ' : ' + ') + gb + ' = ' + front + '.',
+            'Back part: ' + ga + ' × ' + gb + ' = ' + back + (back < 10 ? ' (write it as ' + vdPad2(back) + ')' : '') + '.',
+            'Join them: ' + front + ' | ' + vdPad2(back) + '  →  ' + N(ans) + '.'
+          ],
+          hint: front + ' | ' + vdPad2(back) + '  →  ' + N(ans)
+        };
+      }
+    },
+
+    /* ---- 10. digit sum ---- */
+    {
+      id: 'digitsum', icon: '🔍', title: 'Digit Sum: Check Your Answers',
+      short: 'Add the digits until one digit is left!',
+      sutra: null,
+      intro: 'The digit sum (called Beejank) is the single digit you get by adding all the digits again and again. It is a quick way to check if your multiplication or addition answer is right.',
+      steps: [
+        'Add all the digits of the number.',
+        'If you get a 2-digit number, add its digits too. Keep going until only one digit is left.',
+        'Shortcut: you can cross out any 9s, or any digits that add up to 9.'
+      ],
+      more: [
+        'Checking a multiplication: 23 × 14 = 322. Digit sum of 23 is 5, digit sum of 14 is 5, and 5 × 5 = 25 → 2 + 5 = 7. Digit sum of 322 is 3 + 2 + 2 = 7. They match, so the answer is probably right!',
+        'If the digit sums do NOT match, your answer is definitely wrong. Check it again.'
+      ],
+      tip: 'Digit sum of 5,874: 5+8+7+4 = 24 → 2+4 = 6.',
+      examples: [ { n: 5874 }, { n: 2468 }, { n: 9301 } ],
+      rand: function(rng){ return { n: randIntWith(rng, 100, 99999) }; },
+      solve: function(p){
+        var lines = [];
+        var cur = p.n;
+        while (cur > 9){
+          var ds = String(cur).split('').map(Number);
+          var sum = ds.reduce(function(a, b){ return a + b; }, 0);
+          lines.push((lines.length ? 'Add again: ' : 'Add the digits: ') + ds.join(' + ') + ' = ' + sum + '.');
+          cur = sum;
+        }
+        if (!lines.length) lines.push('It is already one digit: ' + cur + '.');
+        var ans = vdDigitRoot(p.n);
+        return {
+          prompt: 'Digit sum of ' + p.n,
+          answer: ans, decimals: 0, steps: lines,
+          hint: lines.map(function(l){ return l.replace(/^(Add the digits: |Add again: )/, '').replace(/\.$/, ''); }).join(' → ')
+        };
+      }
+    }
+  ];
+
+  var VEDIC_BY_ID = {};
+  VEDIC_CHAPTERS.forEach(function(c, i){ c.num = i + 1; VEDIC_BY_ID[c.id] = c; });
+
+  function vedicGenerate(chapterId, rng){
+    var ch = VEDIC_BY_ID[chapterId];
+    if (!ch) ch = vdPick(rng, VEDIC_CHAPTERS);
+    var out = ch.solve(ch.rand(rng));
+    out.chapter = ch.id;
+    return out;
+  }
+
+  /* VEDIC-END */
+
+  /* ================= PHONICS: chapters, sound cards and question generators ================= */
+  /* PHONICS-BEGIN (self-contained: only needs an rng function) */
+
+  /* Spoken approximations of letter sounds for the browser voice (tweak here if a sound reads badly). */
+  var PH_SAY = {
+    a:'ah', b:'buh', c:'kuh', d:'duh', e:'eh', f:'fff', g:'guh', h:'huh', i:'ih', j:'juh', k:'kuh', l:'lll',
+    m:'mmm', n:'nnn', o:'aw', p:'puh', q:'kwuh', r:'rrr', s:'sss', t:'tuh', u:'uh', v:'vvv', w:'wuh', x:'ks', y:'yuh', z:'zzz'
+  };
+
+  /* U = a sound card (letters, how to say it, sound id, where it sits in the words, key words)
+     W = a key word (word, emoji, optional look-alike words, optional position override) */
+  function phU(u, say, snd, pos, words){ return { u: u, say: say, snd: snd, pos: pos, words: words }; }
+  function phW(w, e, alt, pos){ return { w: w, e: e, alt: alt || null, pos: pos || null }; }
+  function phC(w, e, alt){ return { w: w, e: e, alt: alt, parts: w.split('') }; }
+
+  var PH_CHAPTERS = [
+    {
+      id: 'ph1', icon: '🔤', type: 'sounds', title: 'Letter Sounds: s a t i p n',
+      short: 'Our first six sounds',
+      intro: 'Every letter makes a sound. Tap a sound to hear it, and tap a word to hear the whole word!',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('s', 'sss', 's', 'start', [phW('sun', '☀️'), phW('sock', '🧦'), phW('snake', '🐍')]),
+        phU('a', 'ah', 'a', 'start', [phW('apple', '🍎'), phW('ant', '🐜'), phW('alligator', '🐊')]),
+        phU('t', 'tuh', 't', 'start', [phW('tiger', '🐯'), phW('tent', '⛺'), phW('turtle', '🐢')]),
+        phU('i', 'ih', 'i', 'start', [phW('ink', '🖋️'), phW('insect', '🐛'), phW('iguana', '🦎')]),
+        phU('p', 'puh', 'p', 'start', [phW('pig', '🐷'), phW('pen', '🖊️'), phW('panda', '🐼')]),
+        phU('n', 'nnn', 'n', 'start', [phW('nose', '👃'), phW('nut', '🥜'), phW('net', '🥅')])
+      ]
+    },
+    {
+      id: 'ph2', icon: '🔡', type: 'sounds', title: 'Letter Sounds: c k e h r m d',
+      short: 'Seven more sounds',
+      intro: 'Here are seven more sounds. Notice that “c” and “k” make the very same sound at the start of a word!',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('c', 'kuh', 'k', 'start', [phW('cat', '🐱'), phW('cap', '🧢'), phW('cow', '🐄')]),
+        phU('k', 'kuh', 'k', 'start', [phW('kid', '🧒'), phW('key', '🔑'), phW('kangaroo', '🦘')]),
+        phU('e', 'eh', 'e', 'start', [phW('egg', '🥚'), phW('elephant', '🐘'), phW('envelope', '✉️')]),
+        phU('h', 'huh', 'h', 'start', [phW('hat', '🎩'), phW('hen', '🐔'), phW('hand', '✋')]),
+        phU('r', 'rrr', 'r', 'start', [phW('rat', '🐀'), phW('ring', '💍'), phW('robot', '🤖')]),
+        phU('m', 'mmm', 'm', 'start', [phW('moon', '🌙'), phW('mouse', '🐭'), phW('mango', '🥭')]),
+        phU('d', 'duh', 'd', 'start', [phW('dog', '🐶'), phW('duck', '🦆'), phW('door', '🚪')])
+      ]
+    },
+    {
+      id: 'ph3', icon: '🅰️', type: 'sounds', title: 'Letter Sounds: g o u l f b',
+      short: 'Six more sounds',
+      intro: 'Six more sounds to learn. Say each word slowly and listen to how it starts.',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('g', 'guh', 'g', 'start', [phW('goat', '🐐'), phW('gift', '🎁'), phW('guitar', '🎸')]),
+        phU('o', 'aw', 'o', 'start', [phW('orange', '🍊'), phW('octopus', '🐙'), phW('ox', '🐂')]),
+        phU('u', 'uh', 'u', 'start', [phW('umbrella', '☂️'), phW('up', '⬆️')]),
+        phU('l', 'lll', 'l', 'start', [phW('lion', '🦁'), phW('leaf', '🍃'), phW('lemon', '🍋')]),
+        phU('f', 'fff', 'f', 'start', [phW('fish', '🐟'), phW('fork', '🍴'), phW('foot', '🦶')]),
+        phU('b', 'buh', 'b', 'start', [phW('ball', '⚽'), phW('bus', '🚌'), phW('banana', '🍌')])
+      ]
+    },
+    {
+      id: 'ph4', icon: '🧩', type: 'cvc', title: 'Blending: Make Short Words',
+      short: 'Join three sounds to read a word',
+      intro: 'Now let us join sounds together! Say each sound one by one, then push them together quickly: c – a – t makes “cat”.',
+      qtypes: ['blend2pic', 'pic2word'],
+      words: [
+        phC('cat', '🐱', ['cut', 'cot']), phC('dog', '🐶', ['dig', 'dug']), phC('pig', '🐷', ['peg', 'pug']),
+        phC('sun', '☀️', ['sin', 'son']), phC('hen', '🐔', ['hat', 'hem']), phC('bus', '🚌', ['bug', 'bud']),
+        phC('bat', '🦇', ['bit', 'bag']), phC('fox', '🦊', ['fix', 'box']), phC('bed', '🛏️', ['bad', 'bid']),
+        phC('hat', '🎩', ['hit', 'hut']), phC('rat', '🐀', ['rot', 'rut']), phC('van', '🚐', ['vet', 'fan']),
+        phC('web', '🕸️', ['wet', 'wed']), phC('pen', '🖊️', ['pin', 'pan'])
+      ]
+    },
+    {
+      id: 'ph5', icon: '🗣️', type: 'sounds', title: 'Two Letters, One Sound: sh ch th ng',
+      short: 'Digraphs: sh · ch · th · ng',
+      intro: 'Sometimes two letters work together to make just ONE sound. These pairs are called digraphs. Look for them at the start or the end of a word.',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('sh', 'shh', 'sh', 'start', [phW('ship', '🚢'), phW('shell', '🐚'), phW('fish', '🐟', null, 'end')]),
+        phU('ch', 'chuh', 'ch', 'start', [phW('chair', '💺'), phW('cheese', '🧀'), phW('chick', '🐥')]),
+        phU('th', 'thh', 'th', 'start', [phW('thumb', '👍'), phW('bath', '🛁', null, 'end'), phW('think', '💭')]),
+        phU('ng', 'ng', 'ng', 'end', [phW('ring', '💍'), phW('sing', '🎤'), phW('song', '🎵')])
+      ]
+    },
+    {
+      id: 'ph6', icon: '🧱', type: 'sounds', title: 'Sounds Together: Blends',
+      short: 'cl · fl · st · tr · dr · cr · sp · fr · pl · sl',
+      intro: 'A blend is two sounds said quickly one after the other. You can still hear both letters, like “s-t” in star.',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('cl', 'kluh', 'cl', 'start', [phW('clap', '👏'), phW('clock', '🕐')]),
+        phU('fl', 'fluh', 'fl', 'start', [phW('flag', '🚩'), phW('flower', '🌸')]),
+        phU('st', 'stuh', 'st', 'start', [phW('star', '⭐'), phW('stop', '🛑')]),
+        phU('tr', 'truh', 'tr', 'start', [phW('tree', '🌳'), phW('truck', '🚚')]),
+        phU('dr', 'druh', 'dr', 'start', [phW('drum', '🥁'), phW('dress', '👗')]),
+        phU('cr', 'kruh', 'cr', 'start', [phW('crab', '🦀'), phW('crown', '👑')]),
+        phU('sp', 'spuh', 'sp', 'start', [phW('spoon', '🥄'), phW('spider', '🕷️')]),
+        phU('fr', 'fruh', 'fr', 'start', [phW('frog', '🐸')]),
+        phU('pl', 'pluh', 'pl', 'start', [phW('plug', '🔌')]),
+        phU('sl', 'sluh', 'sl', 'start', [phW('sled', '🛷')])
+      ]
+    },
+    {
+      id: 'ph7', icon: '🪄', type: 'sounds', title: 'The Magic E',
+      short: 'a_e · i_e · o_e · u_e',
+      intro: 'A silent “e” at the end of a word is magic! It does not make a sound, but it makes the vowel say its own name. “cap” becomes “cape”, “kit” becomes “kite”.',
+      qtypes: ['pic2word', 'pic2sound'],
+      units: [
+        phU('a_e', 'ay', 'a_e', 'mid', [phW('cake', '🎂', ['can', 'cap']), phW('snake', '🐍', ['snack', 'snap']), phW('plane', '✈️', ['plan', 'plant'])]),
+        phU('i_e', 'eye', 'i_e', 'mid', [phW('kite', '🪁', ['kit', 'kick']), phW('bike', '🚲', ['bit', 'big'])]),
+        phU('o_e', 'oh', 'o_e', 'mid', [phW('rose', '🌹', ['rod', 'rock']), phW('bone', '🦴', ['bog', 'bun']), phW('nose', '👃', ['nod', 'not']), phW('home', '🏠', ['hum', 'ham'])]),
+        phU('u_e', 'yoo', 'u_e', 'mid', [phW('cube', '🧊', ['cub', 'cup']), phW('tube', '🧪', ['tub', 'tab'])])
+      ]
+    },
+    {
+      id: 'ph8', icon: '🤝', type: 'sounds', title: 'Vowel Teams: ai ee oa oo',
+      short: 'Two vowels that team up',
+      intro: 'When two vowels sit side by side, they team up to make one sound. The first vowel often does the talking: in “rain” you hear “ay”.',
+      qtypes: ['sound2pic', 'pic2sound'],
+      units: [
+        phU('ai', 'ay', 'ai', 'mid', [phW('rain', '🌧️'), phW('snail', '🐌'), phW('mail', '✉️')]),
+        phU('ee', 'ee', 'ee', 'mid', [phW('bee', '🐝'), phW('feet', '🦶'), phW('sheep', '🐑'), phW('tree', '🌳')]),
+        phU('oa', 'oh', 'oa', 'mid', [phW('boat', '⛵'), phW('goat', '🐐'), phW('coat', '🧥'), phW('soap', '🧼')]),
+        phU('oo', 'oo', 'oo', 'mid', [phW('moon', '🌙'), phW('spoon', '🥄'), phW('boot', '👢'), phW('broom', '🧹')])
+      ]
+    }
+  ];
+
+  var PH_BY_ID = {};
+  PH_CHAPTERS.forEach(function(c, i){ c.num = i + 1; PH_BY_ID[c.id] = c; });
+
+  /* ---- question building ---- */
+
+  function phShuffle(arr, rng){
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(rng() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function phItemsOf(ch){
+    var out = [];
+    if (ch.type === 'cvc'){
+      ch.words.forEach(function(w){
+        out.push({ ch: ch.id, u: null, uSay: null, snd: null, pos: 'start', w: w.w, e: w.e, alt: w.alt, parts: w.parts });
+      });
+      return out;
+    }
+    ch.units.forEach(function(u){
+      u.words.forEach(function(w){
+        out.push({ ch: ch.id, u: u.u, uSay: u.say, snd: u.snd, pos: w.pos || u.pos, w: w.w, e: w.e, alt: w.alt || null, parts: null });
+      });
+    });
+    return out;
+  }
+
+  function phPhrase(pos){ return pos === 'start' ? 'starts with' : (pos === 'end' ? 'ends with' : 'has the'); }
+
+  function phMakeQuestion(ch, item, qtype, rng){
+    var items = phItemsOf(ch);
+    var q = { chapter: ch.id, type: qtype, word: item.w, emoji: item.e };
+
+    if (qtype === 'sound2pic'){
+      var others = phShuffle(items.filter(function(o){ return o.snd !== item.snd && o.w !== item.w; }), rng);
+      var picked = [], seenE = {};
+      seenE[item.e] = true;
+      others.forEach(function(o){ if (picked.length < 2 && !seenE[o.e]){ seenE[o.e] = true; picked.push(o); } });
+      var ph = phPhrase(item.pos);
+      q.prompt = 'Which picture ' + ph + ' “' + item.u + '”?';
+      q.speak = 'Which picture ' + ph + ' the sound ' + item.uSay + '?';
+      q.stage = { kind: 'text', text: item.u };
+      q.choices = phShuffle([item].concat(picked), rng).map(function(o){
+        return { kind: 'pic', emoji: o.e, label: o.w, correct: o === item };
+      });
+      q.answerText = item.w;
+    }
+    else if (qtype === 'pic2sound'){
+      var seenU = {}, units = [];
+      items.forEach(function(o){ if (o.snd !== item.snd && !seenU[o.u]){ seenU[o.u] = true; units.push(o); } });
+      var dist = phShuffle(units, rng).slice(0, 3).map(function(o){ return o.u; });
+      q.prompt = item.pos === 'mid'
+        ? (ch.id === 'ph7' ? 'Which magic-e pattern is in “' + item.w + '”?' : 'Which letters make the vowel sound in “' + item.w + '”?')
+        : '“' + item.w + '” ' + phPhrase(item.pos) + ' which sound?';
+      q.speak = item.w + '. ' + (item.pos === 'mid' ? 'Which letters make the vowel sound?' : item.w + ' ' + phPhrase(item.pos) + ' which sound?');
+      q.stage = { kind: 'emoji', emoji: item.e, label: item.w };
+      q.choices = phShuffle([item.u].concat(dist), rng).map(function(u){ return { kind: 'text', text: u, correct: u === item.u }; });
+      q.answerText = item.u;
+    }
+    else if (qtype === 'pic2word'){
+      var opts = [item.w].concat(item.alt.slice(0, 2));
+      q.prompt = 'Which word matches the picture?';
+      q.speak = 'Which word matches the picture?';
+      q.stage = { kind: 'emoji', emoji: item.e, label: '' };
+      q.choices = phShuffle(opts, rng).map(function(w){ return { kind: 'text', text: w, correct: w === item.w }; });
+      q.answerText = item.w;
+    }
+    else { /* blend2pic */
+      var pool = phShuffle(items.filter(function(o){ return o.w !== item.w && o.e !== item.e; }), rng).slice(0, 2);
+      q.prompt = 'Blend the sounds. Which picture is it?';
+      q.speak = item.parts.map(function(p){ return PH_SAY[p] || p; }).join(', ') + '. Blend the sounds. Which picture is it?';
+      q.stage = { kind: 'text', text: item.parts.join(' · ') };
+      q.choices = phShuffle([item].concat(pool), rng).map(function(o){ return { kind: 'pic', emoji: o.e, label: '', correct: o === item }; });
+      q.answerText = item.w;
+    }
+    return q;
+  }
+
+  function phCanDo(item, qtype){
+    if (qtype === 'pic2word') return !!(item.alt && item.alt.length >= 2);
+    if (qtype === 'blend2pic') return !!item.parts;
+    return true;
+  }
+
+  /* Build `count` questions for one chapter (or all chapters when chapterId is 'mixed'). Avoids repeating a word until every word was used. */
+  function phBuildQuestions(chapterId, count, rng){
+    var chapters = chapterId === 'mixed' ? PH_CHAPTERS : [PH_BY_ID[chapterId]];
+    var out = [];
+    var recent = {};
+    for (var n = 0; n < count; n++){
+      var ch = chapters[Math.floor(rng() * chapters.length)];
+      var items = phItemsOf(ch);
+      var item = null;
+      for (var tries = 0; tries < 12 && !item; tries++){
+        var cand = items[Math.floor(rng() * items.length)];
+        if (!recent[cand.w]) item = cand;
+      }
+      if (!item){ recent = {}; item = items[Math.floor(rng() * items.length)]; }
+      recent[item.w] = true;
+      var types = ch.qtypes.filter(function(t){ return phCanDo(item, t); });
+      var qtype = types[Math.floor(rng() * types.length)];
+      out.push(phMakeQuestion(ch, item, qtype, rng));
+    }
+    return out;
+  }
+
+  /* PHONICS-END */
+
+  /* ================= CATEGORIES: Vedic Maths + Phonics (UI, lessons, practice) ================= */
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+
+  /* Register readable names so History / Summary / High Scores can label chapter practice. */
+  VEDIC_CHAPTERS.forEach(function(c){ SKILL_LABEL['vedic:' + c.id] = c.title; });
+  SKILL_LABEL['vedic:mixed'] = 'Mixed — all chapters';
+  PH_CHAPTERS.forEach(function(c){ SKILL_LABEL['phonics:' + c.id] = c.title; });
+  SKILL_LABEL['phonics:mixed'] = 'Mixed — all chapters';
+
+  var CAT_DEF = {
+    vedic:   { chapters: VEDIC_CHAPTERS, name: 'Vedic Maths', icon: '✨', pt: 'vedic' },
+    phonics: { chapters: PH_CHAPTERS,    name: 'Phonics',     icon: '🔤', pt: 'phonics' }
+  };
+
+  function extraScoreRows(){
+    var rows = [];
+    ['vedic', 'phonics'].forEach(function(kind){
+      CAT_DEF[kind].chapters.forEach(function(c){ rows.push({ skill: kind + ':' + c.id, label: c.title, pt: kind }); });
+      rows.push({ skill: kind + ':mixed', label: CAT_DEF[kind].name + ' — Mixed', pt: kind });
+    });
+    return rows;
+  }
+
+  /* ---------- speech helpers ---------- */
+
+  var speakToken = 0;
+  function stopSpeaking(){
+    speakToken++;
+    if (window.speechSynthesis) try { window.speechSynthesis.cancel(); } catch (e){}
+  }
+  function speakQueue(list){
+    var token = ++speakToken;
+    if (window.speechSynthesis) try { window.speechSynthesis.cancel(); } catch (e){}
+    var i = 0;
+    (function next(){
+      if (token !== speakToken || i >= list.length) return;
+      speak(list[i++], function(){ setTimeout(next, 200); });
+    })();
+  }
+  function mathToSpeech(t){
+    return String(t)
+      .replace(/×/g, ' times ').replace(/÷/g, ' divided by ').replace(/−/g, ' minus ').replace(/\+/g, ' plus ')
+      .replace(/→/g, ' gives ').replace(/=/g, ' equals ').replace(/\|/g, ', ').replace(/²/g, ' squared');
+  }
+
+  function bestFor(skill, pt){
+    var r = readJSON('highscores', {})[highScoreKey(skill, pt)];
+    return r ? r.accuracy : null;
+  }
+
+  /* ---------- category switcher ---------- */
+
+  function setCategory(cat){
+    state.category = cat;
+    els.catTabs.querySelectorAll('.cat-tab').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.cat === cat ? 'true' : 'false');
+    });
+    els.abacusPanel.hidden = cat !== 'abacus';
+    els.vedicPanel.hidden = cat !== 'vedic';
+    els.phonicsPanel.hidden = cat !== 'phonics';
+    if (cat === 'vedic' || cat === 'phonics') renderCatPanel(cat);
+    stopSpeaking();
+  }
+
+  var PANEL_IDS = {
+    vedic:   { tabs: 'vedicSubTabs',   learn: 'vedicLearnPane',   practice: 'vedicPracticePane',   list: 'vedicChapterList',   sel: 'vedicChapterSel',   cnt: 'vedicCountSel',   hint: 'vedicPracticeHint',   start: 'btnVedicStart' },
+    phonics: { tabs: 'phonicsSubTabs', learn: 'phonicsLearnPane', practice: 'phonicsPracticePane', list: 'phonicsChapterList', sel: 'phonicsChapterSel', cnt: 'phonicsCountSel', hint: 'phonicsPracticeHint', start: 'btnPhonicsStart' }
+  };
+
+  /* Free visitors get 5-question rounds; 10 / 15 / 20 are for members. */
+  var FREE_PRACTICE_Q = 5;
+
+  function clampPracticeCount(n){
+    n = parseInt(n, 10) || FREE_PRACTICE_Q;
+    return state.premium ? n : Math.min(n, FREE_PRACTICE_Q);
+  }
+
+  function refreshCatLocks(kind){
+    var sel = els[PANEL_IDS[kind].cnt];
+    if (!sel) return;
+    Array.prototype.forEach.call(sel.options, function(o){
+      var n = parseInt(o.value, 10), locked = !state.premium && n > FREE_PRACTICE_Q;
+      o.textContent = n + (locked ? ' 🔒' : '');
+      o.disabled = locked;
+    });
+    if (!state.premium && parseInt(sel.value, 10) > FREE_PRACTICE_Q) sel.value = String(FREE_PRACTICE_Q);
+    sel.classList.toggle('is-locked', !state.premium);
+    var banner = els[kind + 'LockBanner'];
+    if (banner) banner.hidden = !!state.premium;
+  }
+
+  function renderCatPanel(kind){
+    var def = CAT_DEF[kind], ids = PANEL_IDS[kind];
+    var sub = state[kind + 'Sub'];
+    els[ids.tabs].querySelectorAll('.ai-subtab').forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.sub === sub ? 'true' : 'false');
+    });
+    els[ids.learn].hidden = sub !== 'learn';
+    els[ids.practice].hidden = sub !== 'practice';
+
+    var list = els[ids.list];
+    list.innerHTML = '';
+    def.chapters.forEach(function(c){
+      var best = bestFor(kind + ':' + c.id, def.pt);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ch-card';
+      btn.dataset.ch = c.id;
+      btn.innerHTML =
+        '<span class="ch-num">' + c.num + '</span>' +
+        '<span class="ch-ic">' + c.icon + '</span>' +
+        '<span class="ch-main"><span class="ch-title">' + esc(c.title) + '</span><span class="ch-short">' + esc(c.short) + '</span></span>' +
+        (best != null ? '<span class="ch-badge">' + (best >= 70 ? '✓ ' : '') + best + '%</span>' : '') +
+        '<span class="ch-arrow">›</span>';
+      btn.addEventListener('click', function(){ openLesson(kind, c.id); });
+      list.appendChild(btn);
+    });
+
+    var sel = els[ids.sel];
+    sel.innerHTML = '<option value="mixed">Mixed — all chapters</option>' + def.chapters.map(function(c){
+      return '<option value="' + c.id + '">' + c.num + '. ' + esc(c.title) + '</option>';
+    }).join('');
+    sel.value = state[kind + 'PracticeCh'] || 'mixed';
+    updatePracticeHint(kind);
+    refreshCatLocks(kind);
+  }
+
+  function updatePracticeHint(kind){
+    var ids = PANEL_IDS[kind], v = els[ids.sel].value;
+    var ch = kind === 'vedic' ? VEDIC_BY_ID[v] : PH_BY_ID[v];
+    els[ids.hint].textContent = ch
+      ? ch.icon + ' ' + ch.short + (kind === 'vedic' ? ' — type the answer.' : ' — tap the right answer.')
+      : 'Questions from every chapter, all mixed up.';
+  }
+
+  /* ---------- lessons (shared view) ---------- */
+
+  var lessonState = { kind: null, chId: null, tries: [], answered: 0, correct: 0 };
+
+  function openLesson(kind, chId){
+    lessonState.kind = kind;
+    lessonState.chId = chId;
+    $('view-lesson').dataset.kind = kind;
+    var ch = kind === 'vedic' ? VEDIC_BY_ID[chId] : PH_BY_ID[chId];
+    els.lessonHeading.textContent = CAT_DEF[kind].name + ' · Chapter ' + ch.num;
+    if (kind === 'vedic') renderVedicLesson(ch); else renderPhonicsLesson(ch);
+    showView('lesson');
+    window.scrollTo(0, 0);
+  }
+
+  function goPractice(kind, chId){
+    state[kind + 'Sub'] = 'practice';
+    state[kind + 'PracticeCh'] = chId;
+    setCategory(kind);
+    showView('setup');
+    window.scrollTo(0, 0);
+  }
+
+  function renderVedicLesson(ch){
+    var h = '';
+    h += '<div class="lesson-card lesson-hero">' +
+      '<div class="lh-ic">' + ch.icon + '</div>' +
+      '<h3>' + esc(ch.title) + '</h3>' +
+      (ch.sutra ? '<span class="sutra-pill">Sutra: ' + esc(ch.sutra.name) + ' — ' + esc(ch.sutra.meaning) + '</span>' : '') +
+      '<p class="lh-intro">' + esc(ch.intro) + '</p>' +
+      '<button type="button" class="btn btn-ghost btn-sm" data-act="speak-trick">🔊 Read aloud</button>' +
+      '</div>';
+
+    h += '<div class="lesson-card"><h3>🪄 The Trick</h3><ol class="trick-steps">' +
+      ch.steps.map(function(s){ return '<li>' + esc(s) + '</li>'; }).join('') +
+      '</ol><p class="lesson-tip">💡 ' + esc(ch.tip) + '</p></div>';
+
+    if (ch.more){
+      h += '<div class="lesson-card"><h3>⭐ Bonus</h3>' +
+        ch.more.map(function(m){ return '<p class="lesson-p">' + esc(m) + '</p>'; }).join('') + '</div>';
+    }
+
+    h += '<div class="lesson-card"><h3>👀 See it in action</h3>';
+    ch.examples.forEach(function(p, i){
+      var q = ch.solve(p);
+      h += '<div class="ex-box" data-ex="' + i + '">' +
+        '<div class="ex-q">' + esc(q.prompt) + ' = ?</div>' +
+        '<ol class="ex-steps">' +
+        q.steps.map(function(s, j){ return '<li' + (j ? ' hidden' : '') + '>' + esc(s) + '</li>'; }).join('') +
+        '<li class="is-final" hidden>✅ Answer: ' + esc(formatNumber(q.answer)) + '</li>' +
+        '</ol>' +
+        '<button type="button" class="btn btn-outline btn-sm" data-act="reveal">Show next step ›</button>' +
+        '</div>';
+    });
+    h += '</div>';
+
+    h += '<div class="lesson-card"><h3>✍️ Try it yourself</h3><div id="tryList"></div>' +
+      '<p class="try-summary" id="trySummary" hidden></p>' +
+      '<div class="session-row"><button type="button" class="btn btn-ghost btn-sm" data-act="newtry">🔄 New questions</button></div></div>';
+
+    h += '<button type="button" class="btn btn-primary btn-block" data-act="practice">✏️ Practice this chapter ›</button>';
+    els.lessonBody.innerHTML = h;
+    newTry();
+  }
+
+  function newTry(){
+    var ch = VEDIC_BY_ID[lessonState.chId];
+    lessonState.tries = [];
+    lessonState.answered = 0;
+    lessonState.correct = 0;
+    var seen = {};
+    ch.examples.forEach(function(p){ seen[ch.solve(p).prompt] = true; }); /* don't repeat the worked examples */
+    while (lessonState.tries.length < 3){
+      var q = vedicGenerate(ch.id, Math.random);
+      var tries = 0;
+      while (seen[q.prompt] && tries++ < 30) q = vedicGenerate(ch.id, Math.random);
+      seen[q.prompt] = true;
+      lessonState.tries.push(q);
+    }
+    var list = $('tryList');
+    list.innerHTML = lessonState.tries.map(function(q, i){
+      return '<div class="try-row" data-i="' + i + '">' +
+        '<div class="try-q">' + esc(q.prompt) + ' =</div>' +
+        '<input class="num-input try-input" data-i="' + i + '" type="text" inputmode="decimal" aria-label="Answer ' + (i + 1) + '" autocomplete="off">' +
+        '<button type="button" class="btn btn-primary btn-sm" data-act="check" data-i="' + i + '">Check</button>' +
+        '<div class="try-fb" aria-live="polite"></div></div>';
+    }).join('');
+    var sum = $('trySummary');
+    if (sum) sum.hidden = true;
+  }
+
+  function checkTry(i){
+    var q = lessonState.tries[i];
+    var row = els.lessonBody.querySelector('.try-row[data-i="' + i + '"]');
+    if (!q || !row || row.classList.contains('is-done')) return;
+    var input = row.querySelector('.try-input'), fb = row.querySelector('.try-fb');
+    var raw = input.value.trim();
+    if (!raw){ fb.textContent = 'Type an answer first.'; fb.className = 'try-fb'; return; }
+    var val = parseFloat(raw.replace(/,/g, ''));
+    if (isNaN(val)){ fb.textContent = 'Numbers only, please.'; fb.className = 'try-fb bad'; return; }
+    var ok = val === q.answer;
+    row.classList.add('is-done');
+    input.disabled = true;
+    row.querySelector('button').disabled = true;
+    lessonState.answered++;
+    if (ok){
+      lessonState.correct++;
+      fb.className = 'try-fb ok';
+      fb.textContent = 'Correct! ✓  ' + q.hint;
+      burst(row);
+    } else {
+      fb.className = 'try-fb bad';
+      fb.textContent = 'Not quite. Answer: ' + formatNumber(q.answer) + '.  Trick: ' + q.hint;
+    }
+    if (lessonState.answered === lessonState.tries.length){
+      var sum = $('trySummary');
+      sum.hidden = false;
+      sum.textContent = lessonState.correct === 3 ? 'You got all 3! Amazing! ⭐' :
+        'You got ' + lessonState.correct + ' of 3. ' + (lessonState.correct >= 2 ? 'Great job!' : 'Read the trick again, then try new questions.');
+    }
+  }
+
+  /* highlight the sound inside a word, e.g. <b>sh</b>ip */
+  function phHighlight(word, unit, pos){
+    var i;
+    if (!unit) return esc(word);
+    if (unit.indexOf('_') > -1){
+      var v = unit.charAt(0);
+      i = word.indexOf(v);
+      if (i < 0) return esc(word);
+      return esc(word.slice(0, i)) + '<b>' + esc(v) + '</b>' + esc(word.slice(i + 1, word.length - 1)) + '<b>' + esc(word.slice(-1)) + '</b>';
+    }
+    if (pos === 'end'){
+      return word.slice(-unit.length) === unit ? esc(word.slice(0, -unit.length)) + '<b>' + esc(unit) + '</b>' : esc(word);
+    }
+    i = word.indexOf(unit);
+    if (pos === 'start' && i !== 0) return esc(word);
+    if (i < 0) return esc(word);
+    return esc(word.slice(0, i)) + '<b>' + esc(unit) + '</b>' + esc(word.slice(i + unit.length));
+  }
+
+  function phPlayAllList(ch){
+    var out = [];
+    if (ch.type === 'cvc'){
+      ch.words.forEach(function(w){
+        out.push(w.parts.map(function(p){ return PH_SAY[p] || p; }).join(', '));
+        out.push(w.w);
+      });
+    } else {
+      ch.units.forEach(function(u){
+        out.push(u.say);
+        u.words.forEach(function(w){ out.push(w.w); });
+      });
+    }
+    return out;
+  }
+
+  function renderPhonicsLesson(ch){
+    var h = '';
+    h += '<div class="lesson-card lesson-hero">' +
+      '<div class="lh-ic">' + ch.icon + '</div>' +
+      '<h3>' + esc(ch.title) + '</h3>' +
+      '<p class="lh-intro">' + esc(ch.intro) + '</p>' +
+      '<button type="button" class="btn btn-ghost btn-sm" data-act="playall">🔊 Play all</button>' +
+      '</div>';
+
+    if (ch.type === 'cvc'){
+      h += '<p class="lesson-hint">Tap a card to hear the sounds, then the word.</p><div class="ph-grid">';
+      ch.words.forEach(function(w){
+        var say = w.parts.map(function(p){ return PH_SAY[p] || p; }).concat([w.w]).join('|');
+        h += '<button type="button" class="ph-blend" data-act="say" data-say="' + esc(say) + '">' +
+          '<span class="ph-parts">' + w.parts.map(function(p){ return '<span>' + esc(p) + '</span>'; }).join('') + '</span>' +
+          '<span class="ph-result"><span class="pe">' + w.e + '</span> ' + esc(w.w) + '</span></button>';
+      });
+      h += '</div>';
+    } else {
+      h += '<p class="lesson-hint">Tap a big sound to hear it. Tap a word to hear the word.</p><div class="ph-grid">';
+      ch.units.forEach(function(u){
+        h += '<div class="ph-card"><button type="button" class="ph-sound" data-act="say" data-say="' + esc(u.say + '|' + u.words[0].w) + '" aria-label="Hear the sound ' + esc(u.u) + '">' + esc(u.u) + '</button><div class="ph-words">';
+        u.words.forEach(function(w){
+          h += '<button type="button" class="ph-word" data-act="say" data-say="' + esc(w.w) + '"><span class="pe">' + w.e + '</span><span>' + phHighlight(w.w, u.u, w.pos || u.pos) + '</span></button>';
+        });
+        h += '</div></div>';
+      });
+      h += '</div>';
+    }
+
+    h += '<p class="lesson-note">🔈 Sounds are read by your phone’s voice, so they can sound a little robotic. Say each sound out loud together with your teacher!</p>';
+    h += '<button type="button" class="btn btn-primary btn-block" data-act="practice">✏️ Practice this chapter ›</button>';
+    els.lessonBody.innerHTML = h;
+  }
+
+  function onLessonClick(e){
+    var b = e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!b || !els.lessonBody.contains(b)) return;
+    var kind = lessonState.kind;
+    switch (b.dataset.act){
+      case 'speak-trick': {
+        var ch = VEDIC_BY_ID[lessonState.chId];
+        speakQueue([ch.title, ch.intro, 'Here is the trick.'].concat(ch.steps.map(mathToSpeech)).concat([mathToSpeech(ch.tip)]));
+        break;
+      }
+      case 'reveal': {
+        var box = b.closest('.ex-box');
+        var next = box.querySelector('.ex-steps li[hidden]');
+        if (next) next.hidden = false;
+        if (!box.querySelector('.ex-steps li[hidden]')){ b.disabled = true; b.textContent = 'Got it ✓'; }
+        break;
+      }
+      case 'check': checkTry(parseInt(b.dataset.i, 10)); break;
+      case 'newtry': newTry(); break;
+      case 'practice': goPractice(kind, lessonState.chId); break;
+      case 'say': speakQueue(b.dataset.say.split('|')); break;
+      case 'playall': speakQueue(phPlayAllList(PH_BY_ID[lessonState.chId])); break;
+    }
+  }
+
+  /* ---------- shared: finish a Vedic / Phonics practice round ---------- */
+
+  function finishCategorySession(kind, chId, correct, attempted, count){
+    var record = {
+      skill: kind + ':' + chId,
+      practiceType: kind,
+      cfgSummary: count + ' questions',
+      correct: correct,
+      attempted: attempted,
+      accuracy: attempted ? Math.round((correct / attempted) * 100) : 0,
+      date: Date.now(),
+      chapter: chId,
+      count: count
+    };
+    saveHistoryRecord(record);
+    updateHighScore(record);
+    renderSummary(record);
+    showView('summary');
+  }
+
+  /* ---------- Vedic Maths practice (re-uses the typed-answer session screen) ---------- */
+
+  function startVedicSession(chId, count){
+    count = clampPracticeCount(count);
+    session = {
+      type: 'vedic', skill: 'vedic:' + chId, chapter: chId, rng: Math.random,
+      total: count, index: 0, correct: 0, attempted: 0, current: null, seen: {}, timerId: null
+    };
+    showView('session');
+    els.sessionProgressTrack.hidden = false;
+    els.btnSessionReplay.hidden = true;
+    els.sessionLeftMeta.textContent = '✨ Vedic · ' + (chId === 'mixed' ? 'Mixed' : VEDIC_BY_ID[chId].title);
+    updateSessionScore();
+    nextVedicProblem();
+  }
+
+  function nextVedicProblem(){
+    if (!session || session.type !== 'vedic') return;
+    if (session.index >= session.total){ endVedicSession(); return; }
+    els.sessionProgressFill.style.width = Math.round((session.index / session.total) * 100) + '%';
+    var q = vedicGenerate(session.chapter, session.rng), tries = 0;
+    while (session.seen[q.prompt] && tries++ < 30) q = vedicGenerate(session.chapter, session.rng);
+    session.seen[q.prompt] = true;
+    session.current = q;
+    setSessionPrompt(q.prompt + ' = ?');
+    els.sessionStatus.textContent = 'Question ' + (session.index + 1) + ' of ' + session.total +
+      (session.chapter === 'mixed' ? ' · ' + VEDIC_BY_ID[q.chapter].title : '');
+    els.sessionInput.value = '';
+    els.sessionInput.disabled = false;
+    els.sessionInput.focus();
+    setFeedback('', null);
+  }
+
+  function checkVedicAnswer(){
+    if (!session || session.type !== 'vedic' || !session.current || els.sessionInput.disabled) return;
+    var raw = els.sessionInput.value.trim();
+    if (!raw){ setFeedback('Type an answer first.', null); return; }
+    var val = parseFloat(raw.replace(/,/g, ''));
+    if (isNaN(val)){ setFeedback('Numbers only, please.', false); return; }
+    var ok = val === session.current.answer;
+    session.attempted++;
+    if (ok) session.correct++;
+    updateSessionScore();
+    if (ok){ setFeedback('Correct! ✓', true); burst($('view-session').querySelector('.session-card')); }
+    else setFeedback('Not quite — it was ' + formatNumber(session.current.answer) + '.  Trick: ' + session.current.hint, false);
+    els.sessionInput.disabled = true;
+    session.index++;
+    setTimeout(nextVedicProblem, ok ? 700 : 2600);
+  }
+
+  function endVedicSession(){
+    var s = session;
+    session = null;
+    finishCategorySession('vedic', s.chapter, s.correct, s.attempted, s.total);
+  }
+
+  /* ---------- Phonics practice (tap-the-answer screen) ---------- */
+
+  var pq = null;
+
+  function setPqFeedback(msg, ok){
+    els.pqFeedback.textContent = msg;
+    els.pqFeedback.classList.toggle('ok', ok === true);
+    els.pqFeedback.classList.toggle('bad', ok === false);
+  }
+
+  function startPhonicsSession(chId, count){
+    count = clampPracticeCount(count);
+    var qs = phBuildQuestions(chId, count, Math.random);
+    pq = { chapter: chId, count: count, questions: qs, index: 0, correct: 0, attempted: 0, locked: false, timer: null };
+    els.pqMeta.textContent = '🔤 Phonics · ' + (chId === 'mixed' ? 'Mixed' : PH_BY_ID[chId].title);
+    els.pqScore.textContent = '0';
+    els.pqAttempted.textContent = '0';
+    showView('phonicsquiz');
+    showPhonicsQuestion();
+  }
+
+  function showPhonicsQuestion(){
+    var q = pq.questions[pq.index];
+    pq.locked = false;
+    els.pqProgressFill.style.width = Math.round((pq.index / pq.questions.length) * 100) + '%';
+    els.pqStatus.textContent = 'Question ' + (pq.index + 1) + ' of ' + pq.questions.length;
+    els.pqPrompt.textContent = q.prompt;
+    els.pqStage.innerHTML = q.stage.kind === 'text'
+      ? '<div class="pq-big">' + esc(q.stage.text) + '</div>'
+      : '<div class="pq-emoji">' + q.stage.emoji + '</div>' + (q.stage.label ? '<div class="pq-label">' + esc(q.stage.label) + '</div>' : '');
+    els.pqChoices.className = 'pq-choices' + (q.choices.length === 3 ? ' is-three' : '');
+    els.pqChoices.innerHTML = '';
+    q.choices.forEach(function(c, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pq-choice';
+      b.innerHTML = c.kind === 'pic'
+        ? '<span class="pq-ce">' + c.emoji + '</span>' + (c.label ? '<span class="pq-cl">' + esc(c.label) + '</span>' : '')
+        : '<span class="pq-ct">' + esc(c.text) + '</span>';
+      b.addEventListener('click', function(){ choosePhonicsAnswer(i); });
+      els.pqChoices.appendChild(b);
+    });
+    setPqFeedback('', null);
+    speak(q.speak, function(){});
+  }
+
+  function choosePhonicsAnswer(i){
+    if (!pq || pq.locked) return;
+    pq.locked = true;
+    var q = pq.questions[pq.index], c = q.choices[i];
+    var btns = els.pqChoices.querySelectorAll('.pq-choice');
+    pq.attempted++;
+    if (c.correct) pq.correct++;
+    els.pqScore.textContent = pq.correct;
+    els.pqAttempted.textContent = pq.attempted;
+    btns.forEach(function(b, j){
+      b.disabled = true;
+      if (q.choices[j].correct) b.classList.add('is-correct');
+      else if (j === i) b.classList.add('is-wrong');
+    });
+    if (c.correct){ setPqFeedback('Correct! ✓', true); burst($('view-phonicsquiz').querySelector('.session-card')); }
+    else setPqFeedback('Not quite — it is “' + q.answerText + '”', false);
+    speak(q.word, function(){});
+    var mine = pq;
+    pq.timer = setTimeout(function(){
+      if (pq !== mine) return;
+      pq.index++;
+      if (pq.index >= pq.questions.length) endPhonicsSession();
+      else showPhonicsQuestion();
+    }, c.correct ? 1300 : 2300);
+  }
+
+  function endPhonicsSession(){
+    var s = pq;
+    pq = null;
+    finishCategorySession('phonics', s.chapter, s.correct, s.attempted, s.count);
+  }
+
+  function quitPhonics(){
+    if (pq && pq.timer) clearTimeout(pq.timer);
+    pq = null;
+    stopSpeaking();
+    showView('setup');
+  }
+
+  /* ---------- wiring ---------- */
+
+  function attachCategoryHandlers(){
+    els.catTabs.querySelectorAll('.cat-tab').forEach(function(b){
+      b.addEventListener('click', function(){ setCategory(b.dataset.cat); });
+    });
+    ['vedic', 'phonics'].forEach(function(kind){
+      var ids = PANEL_IDS[kind];
+      els[ids.tabs].querySelectorAll('.ai-subtab').forEach(function(b){
+        b.addEventListener('click', function(){ state[kind + 'Sub'] = b.dataset.sub; renderCatPanel(kind); });
+      });
+      els[ids.sel].addEventListener('change', function(){
+        state[kind + 'PracticeCh'] = els[ids.sel].value;
+        updatePracticeHint(kind);
+      });
+      els[ids.start].addEventListener('click', function(){
+        var chId = els[ids.sel].value, count = clampPracticeCount(els[ids.cnt].value);
+        if (kind === 'vedic') startVedicSession(chId, count); else startPhonicsSession(chId, count);
+      });
+    });
+    els.btnLessonBack.addEventListener('click', function(){ showView('setup'); });
+    els.lessonBody.addEventListener('click', onLessonClick);
+    els.lessonBody.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('try-input')) checkTry(parseInt(e.target.dataset.i, 10));
+    });
+    els.btnPqSpeak.addEventListener('click', function(){
+      if (pq) speak(pq.questions[pq.index].speak, function(){});
+    });
+    els.btnPqQuit.addEventListener('click', quitPhonics);
+    els.vedicLockLogin.addEventListener('click', showLoginModal);
+    els.phonicsLockLogin.addEventListener('click', showLoginModal);
+  }
+
 
   /* ================= history / high scores / stats ================= */
 
@@ -1739,7 +3299,7 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
   }
 
   function practiceLabel(pt){
-    return pt === 'timed' ? 'Timed' : (pt === 'oral' ? 'Oral' : 'Assigned');
+    return pt === 'timed' ? 'Timed' : (pt === 'oral' ? 'Oral' : (pt === 'vedic' ? 'Vedic' : (pt === 'phonics' ? 'Phonics' : 'Assigned')));
   }
 
   function renderHistory(){
@@ -1778,6 +3338,18 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
         els.highScoresList.appendChild(item);
       });
     });
+    extraScoreRows().forEach(function(row){
+      var r = scores[highScoreKey(row.skill, row.pt)];
+      if (!r) return;
+      any = true;
+      var item = document.createElement('div');
+      item.className = 'list-item';
+      item.innerHTML =
+        '<div class="row1"><span>' + esc(row.label) + ' · ' + practiceLabel(row.pt) + '</span>' +
+        '<span class="score">' + r.correct + '/' + r.attempted + '</span></div>' +
+        '<div class="row2">Best accuracy ' + r.accuracy + '% · ' + relativeDate(r.date) + '</div>';
+      els.highScoresList.appendChild(item);
+    });
     if (!any) els.highScoresList.innerHTML = '<p class="list-empty">No high scores yet — practice a skill to set your first record!</p>';
   }
 
@@ -1806,6 +3378,17 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
       row.innerHTML =
         '<div class="bar-label"><span>' + s.label + '</span><span>' + (b ? acc + '%' : '—') + '</span></div>' +
         '<div class="bar-track"><div class="bar-fill" style="width:' + (b ? acc : 0) + '%"></div></div>';
+      els.statBars.appendChild(row);
+    });
+    [['vedic', 'Vedic Maths'], ['phonics', 'Phonics']].forEach(function(cat){
+      var agg = { attempted: 0, correct: 0 };
+      hist.forEach(function(r){ if (r.practiceType === cat[0]){ agg.attempted += r.attempted; agg.correct += r.correct; } });
+      var acc = agg.attempted ? Math.round((agg.correct / agg.attempted) * 100) : 0;
+      var row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML =
+        '<div class="bar-label"><span>' + cat[1] + '</span><span>' + (agg.attempted ? acc + '%' : '—') + '</span></div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + (agg.attempted ? acc : 0) + '%"></div></div>';
       els.statBars.appendChild(row);
     });
   }
@@ -2110,7 +3693,8 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
      'aiDrawCanvas','btnAiClear','btnAiGuess','aiGuessResult','aiGuessDigit','aiGuessText','aiConfidence',
      'aiGuessFeedbackRow','btnAiRight','btnAiWrong','aiGuessNote',
      'aiQuizCard','aiQuizProgress','aiQuizQuestion','btnAiQuizSpeak','aiQuizChoices','aiQuizFeedback','btnAiQuizNext',
-     'aiQuizDone','aiQuizScoreText','btnAiQuizRetry'
+     'aiQuizDone','aiQuizScoreText','btnAiQuizRetry',
+     'catTabs','abacusPanel','vedicPanel','phonicsPanel','vedicSubTabs','phonicsSubTabs','vedicLearnPane','vedicPracticePane','phonicsLearnPane','phonicsPracticePane','vedicChapterList','phonicsChapterList','vedicChapterSel','phonicsChapterSel','vedicCountSel','phonicsCountSel','vedicPracticeHint','phonicsPracticeHint','btnVedicStart','btnPhonicsStart','vedicLockBanner','vedicLockLogin','phonicsLockBanner','phonicsLockLogin','btnLessonBack','lessonHeading','lessonBody','pqMeta','pqScore','pqAttempted','pqProgressFill','pqStatus','pqPrompt','pqStage','btnPqSpeak','pqChoices','pqFeedback','btnPqQuit'
     ].forEach(function(id){ els[id] = $(id); });
   }
 
@@ -2197,6 +3781,8 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.btnPracticeAgain.addEventListener('click', function(){
       var r = state._lastRecord;
       if (!r) { showView('setup'); return; }
+      if (r.practiceType === 'vedic'){ startVedicSession(r.chapter, r.count); return; }
+      if (r.practiceType === 'phonics'){ startPhonicsSession(r.chapter, r.count); return; }
       if (r.practiceType === 'timed') startTimedSession(r.skill, Object.assign({}, state.cfg));
       else startOralSession(r.skill, Object.assign({}, state.cfg));
     });
@@ -2205,6 +3791,8 @@ a.btn{ text-decoration:none; display:inline-flex; align-items:center; justify-co
     els.bottomNav.querySelectorAll('.nav-btn').forEach(function(btn){
       btn.addEventListener('click', function(){ showView(btn.dataset.nav); });
     });
+
+    attachCategoryHandlers();
 
     /* ---- AI Basics ---- */
     els.aiSubTabs.querySelectorAll('.ai-subtab').forEach(function(btn){
